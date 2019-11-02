@@ -9,7 +9,7 @@
         <item name="android:statusBarColor">@color/white</item>
         <item name="android:windowLightStatusBar">true</item>
 
-        <item name="android:fontFamily">@font/crimson_text_regular</item>
+        <item name="android:fontFamily">@font/open_sans_regular</item>
         <item name="android:textSize">20sp</item>
 
     </style>

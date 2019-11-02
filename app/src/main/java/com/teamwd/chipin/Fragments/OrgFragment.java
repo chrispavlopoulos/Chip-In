@@ -43,6 +43,7 @@ public class OrgFragment extends ChipFragment{
         public OrgAdapter(){
             Realm realm = Realm.getDefaultInstance();
             organizations = realm.where(Organization.class).findAll();
+            realm.close();
         }
 
         @NonNull
