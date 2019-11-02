@@ -6,6 +6,7 @@ public class ModelUser {
     private String lastName;
     private String email;
     private String password;
+    private Donation donation;
 
     public ModelUser(String firstName, String lastName, String email, String password) {
         this.firstName = firstName;

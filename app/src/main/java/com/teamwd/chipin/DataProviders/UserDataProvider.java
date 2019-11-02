@@ -68,7 +68,7 @@ public class UserDataProvider extends Interfaces {
                     public void onFailure(@NonNull Exception e) {
                         dataProviderCallback.onError("Error adding document" + e.getMessage());
                     }
-                });
+        });
     }
 
     /**
@@ -123,6 +123,10 @@ public class UserDataProvider extends Interfaces {
                         }
                     }
                 });
+    }
+
+
+    public void addDonation(ModelUser modelUser, DataProviderCallback callback){
 
     }
 
