@@ -26,7 +26,7 @@ public class ActivityMain extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         checkLogIn();
-        BottomNavigationView btmNav = findViewById(R.id.bottom_nav_main);
+        final BottomNavigationView btmNav = findViewById(R.id.bottom_nav_main);
         btmNav.setSelectedItemId(R.id.feed_tab);
         viewPager = findViewById(R.id.view_pager_main);
         btmNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
