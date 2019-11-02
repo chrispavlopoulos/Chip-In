@@ -1,4 +1,4 @@
-package com.teamwd.chipin.DataProviders;
+package com.teamwd.chipin.Utils;
 
 import android.content.Context;
 import android.util.Log;
@@ -68,7 +68,7 @@ public class UserDataProvider extends Interfaces {
                     public void onFailure(@NonNull Exception e) {
                         dataProviderCallback.onError("Error adding document" + e.getMessage());
                     }
-        });
+                });
     }
 
     /**
@@ -318,12 +318,12 @@ public class UserDataProvider extends Interfaces {
         }
     }
 
-/*
-    */
+    /*
+     */
 /**
-     * Use this method to add badge list for the user
-     * Make sure to set donation using modelUser.addBadge
-     *//*
+ * Use this method to add badge list for the user
+ * Make sure to set donation using modelUser.addBadge
+ *//*
 
     public void addBadgeList(ModelUser modelUser, final DataProviderCallback callback){
 
@@ -333,8 +333,8 @@ public class UserDataProvider extends Interfaces {
 
     */
 /**
-     * Gets the list of badges for the user
-     *//*
+ * Gets the list of badges for the user
+ *//*
 
     public void getBadges(String emailID, final BadgeCallback callback){
 

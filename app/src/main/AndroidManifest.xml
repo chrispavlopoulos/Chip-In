@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.teamwd.chipin">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -20,8 +22,11 @@
             </intent-filter>
         </activity>
 
+
         <activity android:name=".Activities.ActivityLogIn" />
         <activity android:name=".Activities.ActivityDatabaseTest"/>
+        <activity android:name=".Activities.ActivityRegister" />
+
     </application>
 
 </manifest>

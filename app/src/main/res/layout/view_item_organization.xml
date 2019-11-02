@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/item_size_xxlarge"
+    android:layout_margin="@dimen/padding_large"
+    android:elevation="6dp"
+    android:orientation="vertical"
+    app:cardCornerRadius="@dimen/corner_radius_button">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/padding_large">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/iv_organization_image"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            app:cardBackgroundColor="@color/colorAccent"
+            app:cardCornerRadius="48dp">
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                android:background="@drawable/baseline_person_black_24"
+                android:backgroundTint="@color/white" />
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/iv_organization_image"
+            android:layout_marginStart="@dimen/padding_xlarge"
+            android:text="Cause" />
+
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

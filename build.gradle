@@ -14,7 +14,8 @@ buildscript {
         classpath 'com.google.gms:google-services:4.2.0'
         // Add dependency
         classpath 'io.fabric.tools:gradle:1.31.2'  // Crashlytics plugin
-
+        classpath 'com.android.tools.build:gradle:3.5.0'
+        classpath "io.realm:realm-gradle-plugin:4.1.1"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }

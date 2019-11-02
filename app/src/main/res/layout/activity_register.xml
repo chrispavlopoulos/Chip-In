@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_background"
+    tools:context=".Activities.ActivityLogIn">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/item_size_small"
+        android:layout_marginEnd="@dimen/item_size_small"
+        android:orientation="vertical"
+        android:weightSum="10">
+
+        <TextView
+            android:id="@+id/app_logo"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:text="Register"
+            android:textSize="56sp" />
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="5"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="@drawable/baseline_person_black_24"/>
+
+            <EditText
+                android:id="@+id/edit_first_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="42dp"
+                android:layout_marginBottom="@dimen/padding_large"
+                android:imeOptions="actionNext"
+                android:nextFocusDown="@id/edit_last_name"
+                android:inputType="textPersonName"
+                android:maxLines="1"
+                android:hint="First Name" />
+
+            <EditText
+                android:id="@+id/edit_last_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/item_size_small"
+                android:layout_marginStart="42dp"
+                android:imeOptions="actionNext"
+                android:nextFocusDown="@id/edit_email"
+                android:inputType="textPersonName"
+                android:maxLines="1"
+                android:hint="Last Name" />
+
+
+            <EditText
+                android:id="@+id/edit_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/padding_large"
+                android:imeOptions="actionNext"
+                android:drawableStart="@drawable/baseline_email_black_24"
+                android:drawablePadding="@dimen/padding_large"
+                android:inputType="textEmailAddress"
+                android:nextFocusDown="@id/edit_password"
+                android:maxLines="1"
+                android:hint="Email" />
+
+            <EditText
+                android:id="@+id/edit_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionDone"
+                android:drawableStart="@drawable/baseline_lock_black_24"
+                android:drawablePadding="@dimen/padding_large"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:hint="Password" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical">
+
+            <com.teamwd.chipin.Views.ChipButton
+                android:id="@+id/button_register"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:text="Register"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>
