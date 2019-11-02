@@ -2,6 +2,7 @@ package com.teamwd.chipin.Objects;
 
 import io.realm.RealmObject;
 
+<<<<<<< HEAD
 public class IrsClassification extends RealmObject {
 
     private String subSection;
@@ -80,4 +81,17 @@ public class IrsClassification extends RealmObject {
     public void setDeductibility(String deductability) {
         this.deductibility = deductability;
     }
+=======
+class IrsClassification extends RealmObject {
+
+    private String subSection;
+    private String foundationStatus;
+    private String deductability;
+    private String deductabilityDetail;
+    private String nteeCode;
+    private String nteeClassification;
+    private String nteeLetter;
+    private String nteeType;
+    private String nteeSuffix;
+>>>>>>> ed679443146b1c1d2f376fafca7c96b699ebf397
 }

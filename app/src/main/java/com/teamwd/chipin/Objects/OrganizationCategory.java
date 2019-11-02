@@ -13,5 +13,8 @@ public class OrganizationCategory extends RealmObject {
     public OrganizationCategory() {
 
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> ed679443146b1c1d2f376fafca7c96b699ebf397
 }
