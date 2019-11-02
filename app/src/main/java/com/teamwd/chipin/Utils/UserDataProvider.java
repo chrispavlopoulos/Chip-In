@@ -9,7 +9,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -20,8 +19,6 @@ import com.teamwd.chipin.Models.ModelUser;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import static com.teamwd.chipin.Activities.ActivityDatabaseTest.getRandString;
 
 public class UserDataProvider extends Interfaces {
 
@@ -67,7 +64,7 @@ public class UserDataProvider extends Interfaces {
                     public void onFailure(@NonNull Exception e) {
                         dataProviderCallback.onError("Error adding document" + e.getMessage());
                     }
-                });
+        });
     }
 
     /**
@@ -122,6 +119,39 @@ public class UserDataProvider extends Interfaces {
                         }
                     }
                 });
+    }
+
+
+    /**
+     * Use this method to add donation for the user
+     * Make sure to set donation using modelUser.setDonation
+     */
+    public void addDonation(ModelUser modelUser, final DataProviderCallback callback){
+        // Create a new user with a first and last name
+        Map<String, Object> donation = new HashMap<>();
+
+        donation.put("amount", modelUser.getDonation().getAmount());
+        donation.put("charity_name", modelUser.getDonation().getCharityName());
+        donation.put("ein", modelUser.getDonation().getEIN());
+        donation.put("time_in_millis", modelUser.getDonation().getTimeInMillis());
+
+        // Add a new document with a generated ID
+        db.collection("users").document(modelUser.getEmail())
+                .collection("donations").document(String.valueOf(modelUser.getDonation().getTimeInMillis()))
+                .set(donation)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        callback.onCompleted();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        callback.onError("Error adding document" + e.getMessage());
+                    }
+                });
+
 
     }
 
