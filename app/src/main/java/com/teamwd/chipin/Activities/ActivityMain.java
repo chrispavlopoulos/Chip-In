@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -18,6 +19,7 @@ import com.teamwd.chipin.Fragments.UserFragment;
 import com.teamwd.chipin.Interfaces.Interfaces;
 import com.teamwd.chipin.Models.ViewPagerAdapter;
 import com.teamwd.chipin.R;
+import com.teamwd.chipin.Utils.OrganizationDataProvider;
 
 import io.realm.Realm;
 
@@ -25,6 +27,7 @@ public class ActivityMain extends AppCompatActivity {
 
     ViewPager viewPager;
     BottomNavigationView bottomNav;
+    private static boolean IS_TESTING_DB = true;
 
     private MenuItem lastCheckedItem = null;
 
@@ -39,24 +42,68 @@ public class ActivityMain extends AppCompatActivity {
         viewPager = findViewById(R.id.view_pager_main);
         bottomNav = findViewById(R.id.bottom_nav_main);
 
+        if(IS_TESTING_DB)
+        {
+            Intent intent = new Intent(this, ActivityDatabaseTest.class);
+            startActivity(intent);
+            return;
+        }
 
-        ActivityLogIn.asyncLogIn(getBaseContext(), new Interfaces.Callback() {
-            @Override
-            public void onSuccess() {
-                setUpApp();
-            }
 
-            @Override
-            public void onError() {
-                Intent loginIntent = new Intent(ActivityMain.this, ActivityLogIn.class);
-                startActivity(loginIntent);
-            }
-        });
+        if(ActivityLogIn.userLoggedIn) {
+
+            setUpApp();
+
+        }else{
+            bottomNav.setVisibility(View.INVISIBLE);
+
+            ActivityLogIn.asyncLogIn(getBaseContext(), new Interfaces.Callback() {
+                @Override
+                public void onSuccess() {
+                    setUpApp();
+                }
+
+                @Override
+                public void onError() {
+                    startLogInActivity();
+                }
+            });
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1) {
+            if (resultCode == Activity.RESULT_OK) {
+                setUpApp();
+            }
+            else if(resultCode == Activity.RESULT_CANCELED){
+                startLogInActivity();
+            }
+        }
+    }
+
+    /**
+     *  Only sets the app up if this closes with a result code of 1
+     */
+    private void startLogInActivity(){
+        Intent intent = new Intent(ActivityMain.this, ActivityLogIn.class);
+        overridePendingTransition(R.anim.slide_in_top, 0);
+        startActivityForResult(intent, 1);
+    }
+
     private void setUpApp(){
+        bottomNav.setVisibility(View.VISIBLE);
+
         setUpRealm();
         setUpViewPager();
 
@@ -67,6 +114,7 @@ public class ActivityMain extends AppCompatActivity {
 
     private void setUpRealm(){
         Realm.init(getBaseContext());
+        //OrganizationDataProvider.getInstance(getBaseContext()).loadAllOrganizations();
     }
 
     private void setUpViewPager() {
@@ -78,11 +126,7 @@ public class ActivityMain extends AppCompatActivity {
 
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                if(lastPosition != -1 && lastPosition != position){
-                    selectItem(position);
-                }
 
-                lastPosition = position;
             }
 
             @Override

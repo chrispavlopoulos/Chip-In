@@ -1,6 +1,7 @@
 package com.teamwd.chipin.Activities;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -45,17 +46,17 @@ public class ActivityDatabaseTest extends AppCompatActivity {
             }
         });
 
-        userDataProvider.getAllUsers(new Interfaces.DataProviderCallback() {
-            @Override
-            public void onCompleted() {
+        userDataProvider.getAllUsers(new Interfaces.UserListCallback() {
+             @Override
+             public void onCompleted(ArrayList<ModelUser> user) {
 
-            }
+             }
 
-            @Override
-            public void onError(String msg) {
-                Toast.makeText(ActivityDatabaseTest.this, msg, Toast.LENGTH_SHORT).show();
-            }
-        });
+             @Override
+             public void onError(String msg) {
+
+             }
+            });
 
         userDataProvider.getUser(emailID, new Interfaces.UserCallback() {
             @Override
@@ -209,6 +210,18 @@ public class ActivityDatabaseTest extends AppCompatActivity {
             }
         });
 
+
+        userDataProvider.getAllDonations(new Interfaces.DonationsListCallback() {
+            @Override
+            public void onCompleted(ArrayList<Donation> donations) {
+                Log.e("stop","here");
+            }
+
+            @Override
+            public void onError(String msg) {
+
+            }
+        });
     }
 
 
