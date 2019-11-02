@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Chip In</string>
+    <string name="title_activity_database_test">ActivityDatabaseTest</string>
 </resources>

@@ -11,6 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+
         <activity android:name=".Activities.ActivityMain">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,7 +20,10 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".Activities.ActivityLogIn"/>
+
+        <activity android:name=".Activities.ActivityLogIn" />
+        <activity android:name=".Activities.ActivityDatabaseTest"/>
+
     </application>
 
 </manifest>
