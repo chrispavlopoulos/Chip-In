@@ -18,12 +18,6 @@ public class Organization extends RealmObject {
     private IrsClassification irsClassification;
     private OrganizationAddress mailingAddress;
     private OrganizationAddress donationAddress;
-    //private AdvisoryCollection activeAdvisories;
-    //private AdvisoryCollection removedAdvisories;
-    //private Representative currentBoardChair;
-    //private Representative currentCeo;
-    //private RatingLink currentRating;
-    //private RatingCollection ratingHistory;
 
     public Organization() { }
 
