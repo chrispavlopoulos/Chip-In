@@ -5,7 +5,7 @@
     android:background="@drawable/event_background">
 
     <ImageView
-        android:id="@+id/user_profile_pic_preview"
+        android:id="@+id/company_pic_preview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="@dimen/padding_medium"
