@@ -157,6 +157,7 @@ public class ActivityDatabaseTest extends AppCompatActivity {
         for(int i=0; i< 3; i++){
             modelUser.addBadge(getRandString());
         }
+/*
         userDataProvider.addBadgeList(modelUser, new Interfaces.DataProviderCallback() {
             @Override
             public void onCompleted() {
@@ -180,6 +181,7 @@ public class ActivityDatabaseTest extends AppCompatActivity {
 
             }
         });
+*/
 
     }
 
