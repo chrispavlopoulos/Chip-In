@@ -18,8 +18,17 @@ public class Organization extends RealmObject {
     private IrsClassification irsClassification;
     private OrganizationAddress mailingAddress;
     private OrganizationAddress donationAddress;
+    private CurrentRating currentRating;
 
     public Organization() { }
+
+    public CurrentRating getCurrentRating() {
+        return currentRating;
+    }
+
+    public void setCurrentRating(CurrentRating currentRating) {
+        this.currentRating = currentRating;
+    }
 
     public String getEin() {
         return ein;

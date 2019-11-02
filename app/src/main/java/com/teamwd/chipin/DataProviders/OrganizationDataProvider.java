@@ -18,9 +18,11 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.teamwd.chipin.Interfaces.Interfaces;
 import com.teamwd.chipin.Models.ModelUser;
+import com.teamwd.chipin.Objects.CurrentRating;
 import com.teamwd.chipin.Objects.IrsClassification;
 import com.teamwd.chipin.Objects.Organization;
 import com.teamwd.chipin.Objects.OrganizationAddress;
+import com.teamwd.chipin.Objects.OrganizationCategory;
 import com.teamwd.chipin.Objects.OrganizationCause;
 
 import org.json.JSONArray;
@@ -32,6 +34,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
+import io.realm.Realm;
 
 public class OrganizationDataProvider extends Interfaces {
 
@@ -57,6 +60,7 @@ public class OrganizationDataProvider extends Interfaces {
             public void onResponse(String response) {
                 try {
                     JSONArray organizations = new JSONArray(response);
+                    Realm realm = Realm.getDefaultInstance();
                     for (int i = 0; i < organizations.length(); i++) {
                         JSONObject object = organizations.getJSONObject(i);
                         Organization organization = new Organization();
@@ -94,18 +98,37 @@ public class OrganizationDataProvider extends Interfaces {
                             OrganizationCause cause = new OrganizationCause();
                             cause.setCauseId(causeObj.getInt("causeID"));
                             cause.setCauseName(causeObj.getString("causeName"));
-                            cause.setImage(causeObj.getString(causeObj.getString("")));
+                            cause.setImage(causeObj.getString(causeObj.getString("image")));
+                            organization.setCause(cause);
                         }
 
                         if (object.has("category")) {
-
+                            JSONObject categoryObj = object.getJSONObject("category");
+                            OrganizationCategory category = new OrganizationCategory();
+                            category.setImage(categoryObj.getString("image"));
+                            category.setCategoryName(categoryObj.getString("categoryName"));
+                            category.setCategoryId(categoryObj.getInt("categoryID"));
+                            organization.setCategory(category);
                         }
 
                         if (object.has("currentRating")) {
-
+                            JSONObject ratingObj = object.getJSONObject("currentRating");
+                            JSONObject ratingImgs = ratingObj.getJSONObject("ratingImage");
+                            CurrentRating rating = new CurrentRating();
+                            rating.setScore(ratingObj.getInt("score"));
+                            rating.setRatingId(ratingObj.getInt("ratingID"));
+                            rating.setPublicationDate(ratingObj.getString("publicationDate"));
+                            rating.setLargeImg(ratingImgs.getString("large"));
+                            rating.setSmallImg(ratingImgs.getString("small"));
+                            rating.setRating(ratingObj.getInt("rating"));
+                            organization.setCurrentRating(rating);
                         }
 
+                        realm.beginTransaction();
+                        realm.copyToRealmOrUpdate(organization);
+                        realm.commitTransaction();
                     }
+                    realm.close();
 
                 } catch (JSONException e) {
                     e.printStackTrace();
