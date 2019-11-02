@@ -19,6 +19,8 @@ import com.teamwd.chipin.Views.ChipButton;
 
 public class ActivityLogIn extends AppCompatActivity {
 
+    public static boolean userLoggedIn = false;
+
     View root;
     EditText emailField;
     EditText passwordField;
@@ -51,10 +53,12 @@ public class ActivityLogIn extends AppCompatActivity {
                 attemptLogIn(email, password);
             }
         });
+
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(ActivityLogIn.this, ActivityRegister.class));
+                overridePendingTransition(R.anim.slide_in_bottom, 0);
             }
         });
     }
@@ -81,7 +85,16 @@ public class ActivityLogIn extends AppCompatActivity {
                 if (user.getPassword().equals(password)){
                     emailField.setText(user.getEmail());
                     passwordField.setText(user.getPassword());
+
+                    SharedPrefsUtil.saveUser(getBaseContext(), user);
+
+                    userLoggedIn = true;
+
+                    Intent result = new Intent();
+                    result.putExtra("result", "granted");
+                    setResult(RESULT_OK, result);
                     finish();
+                    overridePendingTransition(0, R.anim.slide_out_top);
                 }
                 else
                     showError("Wrong password.");
