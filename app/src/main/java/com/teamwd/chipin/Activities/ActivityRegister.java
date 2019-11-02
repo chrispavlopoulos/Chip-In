@@ -68,6 +68,6 @@ public class ActivityRegister extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        finishAffinity();
+        finish();
     }
 }

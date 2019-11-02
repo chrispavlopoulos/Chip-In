@@ -26,7 +26,7 @@ public class UserDataProvider extends Interfaces {
     private static FirebaseFirestore db;
     private static UserDataProvider instance = null;
 
-    private UserDataProvider(Context context){
+    private UserDataProvider(Context context) {
         db = FirebaseFirestore.getInstance();
     }
 
@@ -36,9 +36,10 @@ public class UserDataProvider extends Interfaces {
 
     /**
      * Adds the user to the DB
+     *
      * @param modelUser The model user to add
      */
-    public void addUser(ModelUser modelUser, final DataProviderCallback dataProviderCallback){
+    public void addUser(ModelUser modelUser, final DataProviderCallback dataProviderCallback) {
         // Create a new user with a first and last name
         Map<String, Object> user = new HashMap<>();
 
@@ -64,13 +65,13 @@ public class UserDataProvider extends Interfaces {
                     public void onFailure(@NonNull Exception e) {
                         dataProviderCallback.onError("Error adding document" + e.getMessage());
                     }
-        });
+                });
     }
 
     /**
      * Get the list of all the users
      */
-    public void getAllUsers(final DataProviderCallback callback){
+    public void getAllUsers(final DataProviderCallback callback) {
         db.collection("users")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -98,33 +99,29 @@ public class UserDataProvider extends Interfaces {
                 });
     }
 
-    public void getUser(String emailID, final UserCallback callback){
-        try{
-            db.collection("users")
-                    .document(emailID)
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            if (task.isSuccessful()) {
-                                DocumentSnapshot documentSnapshot = task.getResult();
-                                Map<String, Object> data = documentSnapshot.getData();
-                                ModelUser modelUser = new ModelUser(
-                                        data.get("first").toString(),
-                                        data.get("last").toString(),
-                                        data.get("email").toString(),
-                                        data.get("password").toString()
-                                );
+    public void getUser(String emailID, final UserCallback callback) {
+        db.collection("users")
+                .document(emailID)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot documentSnapshot = task.getResult();
+                            Map<String, Object> data = documentSnapshot.getData();
+                            ModelUser modelUser = new ModelUser(
+                                    data.get("first").toString(),
+                                    data.get("last").toString(),
+                                    data.get("email").toString(),
+                                    data.get("password").toString()
+                            );
 
-                                callback.onCompleted(modelUser);
-                            } else {
-                                callback.onError("Error getting documents: " + task.getException().getMessage());
-                            }
+                            callback.onCompleted(modelUser);
+                        } else {
+                            callback.onError("Error getting documents: " + task.getException().getMessage());
                         }
-                    });
-        }catch (Exception e){
-            callback.onError("Error getting documents: " + e.getMessage());
-        }
+                    }
+                });
 
     }
 
@@ -133,7 +130,7 @@ public class UserDataProvider extends Interfaces {
      * Use this method to add donation for the user
      * Make sure to set donation using modelUser.setDonation
      */
-    public void addDonation(ModelUser modelUser, final DataProviderCallback callback){
+    public void addDonation(ModelUser modelUser, final DataProviderCallback callback) {
         // Create a new user with a first and last name
         Map<String, Object> donation = new HashMap<>();
 
@@ -165,7 +162,7 @@ public class UserDataProvider extends Interfaces {
     /**
      * Gets the list of donations for the user
      */
-    public void getDonations(String emailID, final DonationsCallback callback){
+    public void getDonations(String emailID, final DonationsCallback callback) {
 
         db.collection("users")
                 .document(emailID)
