@@ -46,7 +46,6 @@ public class ActivityDatabaseTest extends AppCompatActivity {
         userDataProvider.getAllUsers(new Interfaces.DataProviderCallback() {
             @Override
             public void onCompleted() {
-                ArrayList<ModelUser> modelUsers = userDataProvider.getModelUsersList();
 
             }
 
@@ -76,6 +75,18 @@ public class ActivityDatabaseTest extends AppCompatActivity {
             @Override
             public void onCompleted() {
                 Toast.makeText(ActivityDatabaseTest.this, "Got donation!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(String msg) {
+
+            }
+        });
+
+        userDataProvider.getUser("", new Interfaces.UserCallback() {
+            @Override
+            public void onCompleted(ModelUser user) {
+                //Toast.makeText(ActivityDatabaseTest.this, "Got user!", Toast.LENGTH_SHORT).show();
             }
 
             @Override

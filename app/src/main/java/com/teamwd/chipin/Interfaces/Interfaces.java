@@ -1,6 +1,9 @@
 package com.teamwd.chipin.Interfaces;
 
+import com.teamwd.chipin.Models.Donation;
 import com.teamwd.chipin.Models.ModelUser;
+
+import java.util.ArrayList;
 
 public class Interfaces {
 
@@ -11,6 +14,11 @@ public class Interfaces {
 
     public interface UserCallback{
         public void onCompleted(ModelUser user);
+        public void onError(String msg);
+    }
+
+    public interface DonationsCallback{
+        public void onCompleted(ArrayList<Donation> donations);
         public void onError(String msg);
     }
 }

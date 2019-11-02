@@ -14,6 +14,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.teamwd.chipin.Interfaces.Interfaces;
+import com.teamwd.chipin.Models.Donation;
 import com.teamwd.chipin.Models.ModelUser;
 
 import java.util.ArrayList;
@@ -24,7 +25,6 @@ public class UserDataProvider extends Interfaces {
 
     private static FirebaseFirestore db;
     private static UserDataProvider instance = null;
-    private ArrayList<ModelUser> modelUsersList = new ArrayList<>();
 
     public UserDataProvider(Context context){
         db = FirebaseFirestore.getInstance();
@@ -77,6 +77,7 @@ public class UserDataProvider extends Interfaces {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
+                            ArrayList<ModelUser> modelUsersList = new ArrayList<>();
                             modelUsersList = new ArrayList<>();
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d("MSG", document.getId() + " => " + document.getData());
@@ -98,27 +99,33 @@ public class UserDataProvider extends Interfaces {
     }
 
     public void getUser(String emailID, final UserCallback callback){
-        db.collection("users")
-                .document(emailID)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot documentSnapshot = task.getResult();
-                            Map<String, Object> data = documentSnapshot.getData();
-                            ModelUser modelUser = new ModelUser(
-                                    data.get("first").toString(),
-                                    data.get("last").toString(),
-                                    data.get("email").toString(),
-                                    data.get("password").toString()
-                            );
-                            callback.onCompleted(modelUser);
-                        } else {
-                            callback.onError("Error getting documents: " + task.getException().getMessage());
+        try{
+            db.collection("users")
+                    .document(emailID)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot documentSnapshot = task.getResult();
+                                Map<String, Object> data = documentSnapshot.getData();
+                                ModelUser modelUser = new ModelUser(
+                                        data.get("first").toString(),
+                                        data.get("last").toString(),
+                                        data.get("email").toString(),
+                                        data.get("password").toString()
+                                );
+
+                                callback.onCompleted(modelUser);
+                            } else {
+                                callback.onError("Error getting documents: " + task.getException().getMessage());
+                            }
                         }
-                    }
-                });
+                    });
+        }catch (Exception e){
+            callback.onError("Error getting documents: " + e.getMessage());
+        }
+
     }
 
 
@@ -154,7 +161,38 @@ public class UserDataProvider extends Interfaces {
 
     }
 
-    public ArrayList<ModelUser> getModelUsersList() {
-        return modelUsersList;
+    /**
+     * Gets the list of donations for the user
+     */
+    public void getDonations(String emailID, final DonationsCallback callback){
+
+        db.collection("users")
+                .document(emailID)
+                .collection("donations")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            ArrayList<Donation> donations = new ArrayList<>();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d("MSG", document.getId() + " => " + document.getData());
+                                Map data = document.getData();
+                                Donation modelUser = new Donation(
+                                        data.get("charity_name").toString(),
+                                        Double.parseDouble(data.get("amount").toString()),
+                                        Long.parseLong(data.get("time_in_millis").toString()),
+                                        data.get("ein").toString()
+                                );
+                                donations.add(modelUser);
+                            }
+                            callback.onCompleted(donations);
+                        } else {
+                            callback.onError("Error getting documents: " + task.getException().getMessage());
+                        }
+                    }
+                });
+
     }
+
 }
