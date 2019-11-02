@@ -46,13 +46,17 @@ public class UserDataProvider extends Interfaces {
         user.put("first", modelUser.getFirstName());
         user.put("last", modelUser.getLastName());
         user.put("email", modelUser.getEmail());
+        user.put("password", modelUser.getPassword());
+
+        String documentPath = modelUser.getEmail();
+        //DocumentReference documentReference = db.document(documentPath);
 
         // Add a new document with a generated ID
-        db.collection("users")
-                .add(user)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        db.collection("users").document(documentPath)
+                .set(user)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(DocumentReference documentReference) {
+                    public void onSuccess(Void aVoid) {
                         dataProviderCallback.onCompleted();
                     }
                 })
@@ -81,7 +85,8 @@ public class UserDataProvider extends Interfaces {
                                 ModelUser modelUser = new ModelUser(
                                         data.get("first").toString(),
                                         data.get("last").toString(),
-                                        data.get("email").toString()
+                                        data.get("email").toString(),
+                                        data.get("password").toString()
                                 );
                                 modelUsersList.add(modelUser);
                             }
