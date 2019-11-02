@@ -1,5 +1,6 @@
 package com.teamwd.chipin.Activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -110,5 +111,30 @@ public class ActivityLogIn extends AppCompatActivity {
                 })
                 .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
                 .show();
+    }
+
+    public static void asyncLogIn(Context context, final Interfaces.Callback callback){
+        final ModelUser savedUser = SharedPrefsUtil.getSavedUser(context);
+        if (savedUser == null) {
+            callback.onError();
+            return;
+        }
+
+
+        UserDataProvider.getInstance(context).getUser(savedUser.getEmail(), new Interfaces.UserCallback() {
+            @Override
+            public void onCompleted(ModelUser user) {
+                if(user.getPassword().equals(savedUser.getPassword()))
+                    callback.onSuccess();
+                else
+                    callback.onError();
+            }
+
+            @Override
+            public void onError(String msg) {
+
+
+            }
+        });
     }
 }

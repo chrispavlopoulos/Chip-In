@@ -15,8 +15,11 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.teamwd.chipin.Fragments.HomeFragment;
 import com.teamwd.chipin.Fragments.OrgFragment;
 import com.teamwd.chipin.Fragments.UserFragment;
+import com.teamwd.chipin.Interfaces.Interfaces;
 import com.teamwd.chipin.Models.ViewPagerAdapter;
 import com.teamwd.chipin.R;
+
+import io.realm.Realm;
 
 public class ActivityMain extends AppCompatActivity {
 
@@ -36,8 +39,24 @@ public class ActivityMain extends AppCompatActivity {
         viewPager = findViewById(R.id.view_pager_main);
         bottomNav = findViewById(R.id.bottom_nav_main);
 
-        checkLogIn();
 
+        ActivityLogIn.asyncLogIn(getBaseContext(), new Interfaces.Callback() {
+            @Override
+            public void onSuccess() {
+                setUpApp();
+            }
+
+            @Override
+            public void onError() {
+                Intent loginIntent = new Intent(ActivityMain.this, ActivityLogIn.class);
+                startActivity(loginIntent);
+            }
+        });
+
+
+    }
+
+    private void setUpApp(){
         setUpRealm();
         setUpViewPager();
 
@@ -45,17 +64,9 @@ public class ActivityMain extends AppCompatActivity {
         startActivity(new Intent(this, ActivityDatabaseTest.class));
     }
 
-    private void checkLogIn(){
-        boolean loggedIn = false;
-
-        if(!loggedIn){
-            Intent loginIntent = new Intent(ActivityMain.this, ActivityLogIn.class);
-            startActivity(loginIntent);
-        }
-    }
 
     private void setUpRealm(){
-        //Realm
+        Realm.init(getBaseContext());
     }
 
     private void setUpViewPager() {
