@@ -2,6 +2,7 @@ package com.teamwd.chipin.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.teamwd.chipin.R;
@@ -12,5 +13,17 @@ public class ActivityMain extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        checkLogIn();
     }
+
+    private void checkLogIn(){
+        boolean loggedIn = false;
+
+        if(!loggedIn){
+            Intent loginIntent = new Intent(ActivityMain.this, ActivityLogIn.class);
+            startActivity(loginIntent);
+        }
+    }
+
 }

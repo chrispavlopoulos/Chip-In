@@ -4,11 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/gradient_background"
     tools:context=".Activities.ActivityLogIn">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/item_size_small"
+        android:layout_marginEnd="@dimen/item_size_small"
         android:orientation="vertical"
         android:weightSum="10">
 
@@ -16,46 +19,56 @@
             android:id="@+id/app_logo"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:text="Chip In"
-            android:textSize="48sp"
+            android:layout_weight="3"
             android:gravity="center"
-            android:layout_weight="3" />
+            android:text="Chip In"
+            android:textSize="48sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="2"
-            android:orientation="vertical"
-            android:gravity="center_vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/padding_large"
-                android:layout_marginBottom="@dimen/padding_large"
-                android:text="Log In"
-                android:textSize="24sp" />
+            android:orientation="vertical">
 
             <EditText
+                android:id="@+id/edit_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/padding_large"
-                android:layout_marginEnd="@dimen/padding_large"
+                android:layout_marginBottom="@dimen/item_size_small"
                 android:drawableStart="@drawable/baseline_person_black_24"
                 android:drawablePadding="@dimen/padding_large"
-                android:hint="Username"/>
+                android:hint="Username" />
 
             <EditText
+                android:id="@+id/edit_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/padding_large"
-                android:layout_marginEnd="@dimen/padding_large"
-                android:drawableStart="@drawable/baseline_person_black_24"
+                android:drawableStart="@drawable/baseline_lock_black_24"
                 android:drawablePadding="@dimen/padding_large"
-                android:hint="Password"/>
+                android:hint="Password" />
 
         </LinearLayout>
 
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:gravity="center_vertical">
+
+            <com.teamwd.chipin.Views.ChipButton
+                android:id="@+id/button_login"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_large"
+                app:text="Log In"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
