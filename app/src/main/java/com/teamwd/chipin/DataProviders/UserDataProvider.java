@@ -27,7 +27,7 @@ public class UserDataProvider extends Interfaces {
     private static UserDataProvider instance = null;
     private ArrayList<ModelUser> modelUsersList = new ArrayList<>();
 
-    public UserDataProvider(Context context){
+    private UserDataProvider(Context context){
         db = FirebaseFirestore.getInstance();
     }
 

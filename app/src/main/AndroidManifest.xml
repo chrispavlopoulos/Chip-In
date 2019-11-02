@@ -23,6 +23,7 @@
 
         <activity android:name=".Activities.ActivityLogIn" />
         <activity android:name=".Activities.ActivityDatabaseTest"/>
+        <activity android:name=".Activities.ActivityRegister" />
 
     </application>
 

@@ -1,10 +1,8 @@
 package com.teamwd.chipin.Activities;
 
-import android.app.Application;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,11 +12,13 @@ import com.teamwd.chipin.Models.ModelUser;
 import com.teamwd.chipin.R;
 import com.teamwd.chipin.Views.ChipButton;
 
-public class ActivityLogIn extends AppCompatActivity {
+public class ActivityRegister extends AppCompatActivity {
 
-    EditText usernameField;
+    EditText firstNameField;
+    EditText lastNameField;
+    EditText emailField;
     EditText passwordField;
-    ChipButton loginButton;
+    ChipButton registerButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,20 +28,22 @@ public class ActivityLogIn extends AppCompatActivity {
         if(getSupportActionBar() != null)
             getSupportActionBar().hide();
 
-        usernameField = findViewById(R.id.edit_username);
+        firstNameField = findViewById(R.id.edit_first_name);
         passwordField = findViewById(R.id.edit_password);
-        loginButton = findViewById(R.id.button_login);
+        registerButton = findViewById(R.id.button_register);
 
         setUpOnClicks();
     }
 
     private void setUpOnClicks() {
-        loginButton.setOnClickListener(new View.OnClickListener() {
+        registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String username = usernameField.getText().toString();
+                String firstName = firstNameField.getText().toString();
+                String lastName = lastNameField.getText().toString();
+                String email = firstNameField.getText().toString();
                 String password = passwordField.getText().toString();
-                UserDataProvider.getInstance(getBaseContext()).addUser(new ModelUser(username, "pavs", "pavs.com"), new Interfaces.DataProviderCallback() {
+                UserDataProvider.getInstance(getBaseContext()).addUser(new ModelUser(firstName, "pavs", "pavs.com"), new Interfaces.DataProviderCallback() {
                     @Override
                     public void onCompleted() {
                         finish();
