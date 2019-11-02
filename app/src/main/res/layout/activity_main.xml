@@ -18,9 +18,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/colorPrimaryDark"
-        app:itemIconTint="@drawable/bottom_navigation_selector"
-        app:itemTextColor="@color/colorAccent"
+        android:background="@drawable/gradient_primary_light_dark"
+        app:itemIconTint="@drawable/selector_bottom_navigation"
+        app:itemTextColor="@drawable/selector_bottom_navigation"
         app:labelVisibilityMode="unlabeled"
         app:menu="@menu/activity_main_menu"/>
 

@@ -84,8 +84,8 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/padding_large"
                 android:text="Register"
-                android:textColor="@color/colorAccent"
-                android:fontFamily="@font/crimson_text_bold"/>
+                android:textColor="@color/white"
+                android:fontFamily="@font/crimson_text_regular"/>
 
         </LinearLayout>
 

@@ -10,6 +10,23 @@
     android:background="@color/cardViewBackground"
     app:cardCornerRadius="@dimen/corner_radius_button">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
+        <ImageView
+            android:id="@+id/user_profile_pic_preview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_person_black_24"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/user_profile_pic_preview"
+            android:text=""/>
+
+
+
+    </RelativeLayout>
 
 </androidx.cardview.widget.CardView>
