@@ -15,6 +15,17 @@ public class ActivityMain extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        checkLogIn();
+    }
+
+    private void checkLogIn(){
+        boolean loggedIn = false;
+
+        if(!loggedIn){
+            Intent loginIntent = new Intent(ActivityMain.this, ActivityLogIn.class);
+            startActivity(loginIntent);
+        }
     }
 
     public void openActivity(View view) {

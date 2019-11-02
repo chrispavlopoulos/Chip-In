@@ -29,5 +29,6 @@
     <dimen name="status_bar_height">25dp</dimen>
     <dimen name="action_bar_height">180dp</dimen>
 
-    <dimen name="default_rounded_corner">4dp</dimen>
+    <dimen name="corner_radius_default">4dp</dimen>
+    <dimen name="corner_radius_button">8dp</dimen>
 </resources>

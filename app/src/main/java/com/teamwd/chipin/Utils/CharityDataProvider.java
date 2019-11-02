@@ -1,4 +1,4 @@
-package com.teamwd.chipin.DataProviders;
+package com.teamwd.chipin.Utils;
 
 import android.content.Context;
 
