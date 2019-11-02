@@ -26,13 +26,13 @@ public class ActivityDatabaseTest extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_database_test);
 
-        ModelUser modelUser = new ModelUser(getRandString(),getRandString(),getRandString() + "@iastate.edu");
+        ModelUser modelUser = new ModelUser(getRandString(),getRandString(),getRandString() + "@iastate.edu", getRandString());
         userDataProvider = UserDataProvider.getInstance(this);
 
         userDataProvider.addUser(modelUser, new Interfaces.DataProviderCallback() {
             @Override
             public void onCompleted() {
-
+                Toast.makeText(ActivityDatabaseTest.this, "Added user", Toast.LENGTH_SHORT).show();
             }
 
             @Override
