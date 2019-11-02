@@ -76,7 +76,7 @@ public class UserDataProvider extends Interfaces {
     /**
      * Get the list of all the users
      */
-    public void getAllUsers(final DataProviderCallback callback){
+    public void getAllUsers(final UserListCallback callback){
         db.collection("users")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -84,7 +84,6 @@ public class UserDataProvider extends Interfaces {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             ArrayList<ModelUser> modelUsersList = new ArrayList<>();
-                            modelUsersList = new ArrayList<>();
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d("MSG", document.getId() + " => " + document.getData());
                                 Map data = document.getData();
@@ -97,7 +96,7 @@ public class UserDataProvider extends Interfaces {
                                 );
                                 modelUsersList.add(modelUser);
                             }
-                            callback.onCompleted();
+                            callback.onCompleted(modelUsersList);
                         } else {
                             callback.onError("Error getting documents: " + task.getException().getMessage());
                         }
@@ -165,6 +164,46 @@ public class UserDataProvider extends Interfaces {
         }catch (Exception e){
             callback.onError("Error adding document" + e.getMessage());
         }
+    }
+
+
+    private int counter = 0 ;
+    public void getAllDonations(final DonationsListCallback callback){
+
+        getAllUsers(new UserListCallback() {
+            @Override
+            public void onCompleted(final ArrayList<ModelUser> users) {
+                final ArrayList<Donation> allDonationsList = new ArrayList<>();
+                for(int i=0; i< users.size(); i++) {
+
+                    ModelUser modelUser = users.get(i);
+                    final int numUsers = users.size();
+
+                    getDonations(modelUser.getEmail(), new DonationsCallback() {
+                        @Override
+                        public void onCompleted(ArrayList<Donation> donations) {
+                            allDonationsList.addAll(donations);
+                            counter++;
+
+                            if(numUsers == counter)
+                                callback.onCompleted(allDonationsList);
+                        }
+
+                        @Override
+                        public void onError(String msg) {
+
+                        }
+                    });
+
+                }
+
+            }
+
+            @Override
+            public void onError(String msg) {
+                callback.onError(msg);
+            }
+        });
     }
 
     /**
@@ -321,6 +360,7 @@ public class UserDataProvider extends Interfaces {
             callback.onError("Error getting documents: " + e.getMessage());
         }
     }
+
 
     /*
      */

@@ -27,6 +27,7 @@ public class ActivityMain extends AppCompatActivity {
 
     ViewPager viewPager;
     BottomNavigationView bottomNav;
+    private static boolean IS_TESTING_DB = true;
 
     private MenuItem lastCheckedItem = null;
 
@@ -40,6 +41,14 @@ public class ActivityMain extends AppCompatActivity {
 
         viewPager = findViewById(R.id.view_pager_main);
         bottomNav = findViewById(R.id.bottom_nav_main);
+
+        if(IS_TESTING_DB)
+        {
+            Intent intent = new Intent(this, ActivityDatabaseTest.class);
+            startActivity(intent);
+            return;
+        }
+
 
         if(ActivityLogIn.userLoggedIn) {
 

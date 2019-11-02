@@ -19,8 +19,13 @@ public class Interfaces {
         public void onError(String msg);
     }
 
+    public interface UserListCallback{
+        public void onCompleted(ArrayList<ModelUser> user);
+        public void onError(String msg);
+    }
+
     public interface UserCallback{
-        public void onCompleted(ModelUser user);
+        public void onCompleted(ModelUser users);
         public void onError(String msg);
     }
 
@@ -41,6 +46,11 @@ public class Interfaces {
 
     public interface EventsCallback{
         public void onCompleted(ArrayList<Event> events);
+        public void onError(String msg);
+    }
+
+    public interface DonationsListCallback{
+        public void onCompleted(ArrayList<Donation> donations);
         public void onError(String msg);
     }
 
