@@ -29,7 +29,7 @@ public class ActivityLogIn extends AppCompatActivity {
         if(getSupportActionBar() != null)
             getSupportActionBar().hide();
 
-        emailField = findViewById(R.id.edit_username);
+        emailField = findViewById(R.id.edit_email);
         passwordField = findViewById(R.id.edit_password);
         loginButton = findViewById(R.id.button_login);
         registerButton = findViewById(R.id.button_register);

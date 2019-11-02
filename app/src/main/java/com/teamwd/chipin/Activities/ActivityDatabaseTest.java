@@ -25,7 +25,8 @@ public class ActivityDatabaseTest extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_database_test);
 
-        ModelUser modelUser = new ModelUser(getRandString(),getRandString(),getRandString() + "@iastate.edu", getRandString());
+        String emailID = getRandString() + "@iastate.edu";
+        ModelUser modelUser = new ModelUser(getRandString(),getRandString(), emailID, getRandString());
         userDataProvider = UserDataProvider.getInstance(this);
 
         userDataProvider.addUser(modelUser, new Interfaces.DataProviderCallback() {
@@ -53,6 +54,18 @@ public class ActivityDatabaseTest extends AppCompatActivity {
             }
         });
 
+        userDataProvider.getUser(emailID, new Interfaces.UserCallback() {
+            @Override
+            public void onCompleted(ModelUser user) {
+                Toast.makeText(ActivityDatabaseTest.this, "Got user!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(String msg) {
+
+            }
+        });
+
     }
 
 
@@ -60,7 +73,7 @@ public class ActivityDatabaseTest extends AppCompatActivity {
      * Creates stub code for us to use
      * @return random 4 char string
      */
-    protected static String getRandString() {
+    public static String getRandString() {
         String SALTCHARS = "qwertyuioplkjhgfdsazxcvbnm";
         StringBuilder salt = new StringBuilder();
         Random rnd = new Random();
