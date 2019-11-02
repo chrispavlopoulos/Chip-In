@@ -6,16 +6,20 @@ import com.teamwd.chipin.Objects.Organization;
 
 import java.util.ArrayList;
 
-public class CharityDataProvider {
+public class OrganizationDataProvider {
 
     private Context context;
 
-    public CharityDataProvider(Context context) {
+    public OrganizationDataProvider(Context context) {
         this.context = context;
     }
 
-    public ArrayList<Organization> getCharityList() {
+    public ArrayList<Organization> loadAllOrganizations() {
         return new ArrayList<>();
+    }
+
+    public Organization getOrganization(String ein) {
+        return new Organization();
     }
 
 }

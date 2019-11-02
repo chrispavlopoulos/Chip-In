@@ -1,6 +1,8 @@
 package com.teamwd.chipin.Objects;
 
-public class Organization {
+import io.realm.RealmObject;
+
+public class Organization extends RealmObject {
 
     private String ein;
     private int orgId;
