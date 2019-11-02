@@ -77,8 +77,11 @@ public class ActivityLogIn extends AppCompatActivity {
         UserDataProvider.getInstance(getBaseContext()).getUser(email, new Interfaces.UserCallback() {
             @Override
             public void onCompleted(ModelUser user) {
-                if (user.getPassword().equals(password))
+                if (user.getPassword().equals(password)){
+                    emailField.setText(user.getEmail());
+                    passwordField.setText(user.getPassword());
                     finish();
+                }
                 else
                     showError("Wrong password.");
             }
