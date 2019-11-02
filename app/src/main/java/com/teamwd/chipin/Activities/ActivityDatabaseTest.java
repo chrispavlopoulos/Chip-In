@@ -6,6 +6,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.teamwd.chipin.Models.Event;
 import com.teamwd.chipin.Utils.UserDataProvider;
 import com.teamwd.chipin.Interfaces.Interfaces;
 import com.teamwd.chipin.Models.Donation;
@@ -182,6 +183,31 @@ public class ActivityDatabaseTest extends AppCompatActivity {
             }
         });
 */
+
+        Event event = new Event(getRandString(), getRandString(),getRandString(), (long) getRandDouble(), 0.75f, Long.parseLong("1572696676059"), Long.parseLong("1577858400000"));
+        userDataProvider.addEvent(event, new Interfaces.DataProviderCallback() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(String msg) {
+
+            }
+        });
+
+        userDataProvider.getAllEvents(new Interfaces.EventsCallback() {
+            @Override
+            public void onCompleted(ArrayList<Event> events) {
+
+            }
+
+            @Override
+            public void onError(String msg) {
+
+            }
+        });
 
     }
 

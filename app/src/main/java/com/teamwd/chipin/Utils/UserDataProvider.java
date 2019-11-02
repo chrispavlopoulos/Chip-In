@@ -18,6 +18,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
 import com.teamwd.chipin.Interfaces.Interfaces;
 import com.teamwd.chipin.Models.Donation;
+import com.teamwd.chipin.Models.Event;
 import com.teamwd.chipin.Models.ModelUser;
 import com.teamwd.chipin.Models.Post;
 
@@ -369,5 +370,67 @@ public class UserDataProvider extends Interfaces {
                 });
     }
 */
+
+    public void addEvent(Event event, final DataProviderCallback callback){
+
+        // Get a new write batch
+        WriteBatch batch = db.batch();
+        DocumentReference ref = db.collection("events").document();
+        batch.set(ref, event);
+
+        // Commit the batch
+        try{
+            batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    callback.onCompleted();
+                }
+            });
+        }catch (Exception e){
+            callback.onError("Error adding document" + e.getMessage());
+        }
+    }
+
+
+
+
+
+
+    public void getAllEvents(final EventsCallback eventsCallback){
+
+        db.collection("events")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            ArrayList<Event> eventArrayList = new ArrayList<>();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d("MSG", document.getId() + " => " + document.getData());
+                                Map data = document.getData();
+                                if(data == null){
+                                    eventsCallback.onError("No post for user" + task.getException().getMessage());
+                                    return;
+                                }
+                                Event event = new Event(
+                                        data.get("companyName").toString(),
+                                        data.get("evenTitle").toString(),
+                                        data.get("eventDetails").toString(),
+                                        (long) data.get("amountContributed"),
+                                        Float.parseFloat(data.get("percentToMatch").toString()),
+                                        (long) data.get("startTime"),
+                                        (long) data.get("endTime")
+
+                                );
+                                eventArrayList.add(event);
+                            }
+                            eventsCallback.onCompleted(eventArrayList);
+                        } else {
+                            eventsCallback.onError("Error getting documents: " + task.getException().getMessage());
+                        }
+                    }
+                });
+
+    }
 
 }

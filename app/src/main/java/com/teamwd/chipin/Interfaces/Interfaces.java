@@ -1,6 +1,7 @@
 package com.teamwd.chipin.Interfaces;
 
 import com.teamwd.chipin.Models.Donation;
+import com.teamwd.chipin.Models.Event;
 import com.teamwd.chipin.Models.ModelUser;
 import com.teamwd.chipin.Models.Post;
 
@@ -33,8 +34,15 @@ public class Interfaces {
         public void onError(String msg);
     }
 
+    public interface EventsCallback{
+        public void onCompleted(ArrayList<Event> events);
+        public void onError(String msg);
+    }
+
     public interface ScoreCallback{
         public void onCompleted(long score);
         public void onError(String msg);
     }
+
+
 }
