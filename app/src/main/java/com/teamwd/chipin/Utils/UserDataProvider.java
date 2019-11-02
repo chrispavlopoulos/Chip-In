@@ -100,6 +100,7 @@ public class UserDataProvider extends Interfaces {
     }
 
     public void getUser(String emailID, final UserCallback callback) {
+
         db.collection("users")
                 .document(emailID)
                 .get()
@@ -108,7 +109,21 @@ public class UserDataProvider extends Interfaces {
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
                             DocumentSnapshot documentSnapshot = task.getResult();
+                            if(documentSnapshot == null){
+                                callback.onError("No User found");
+                                return;
+                            }
+
                             Map<String, Object> data = documentSnapshot.getData();
+                            if (data == null
+                                    || data.get("first") == null
+                                    || data.get("last") == null
+                                    || data.get("email") == null
+                                    || data.get("password") == null) {
+                                callback.onError("No User found");
+                                return;
+                            }
+
                             ModelUser modelUser = new ModelUser(
                                     data.get("first").toString(),
                                     data.get("last").toString(),
@@ -121,7 +136,9 @@ public class UserDataProvider extends Interfaces {
                             callback.onError("Error getting documents: " + task.getException().getMessage());
                         }
                     }
+
                 });
+
 
     }
 

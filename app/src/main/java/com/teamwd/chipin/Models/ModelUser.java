@@ -47,6 +47,9 @@ public class ModelUser {
         this.email = email;
     }
 
+    /**
+     * For this to work you must set origin.
+     */
     public Donation getDonation() {
         return donation;
     }
