@@ -6,7 +6,8 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.teamwd.chipin.DataProviders.UserDataProvider;
+import com.teamwd.chipin.Utils.SharedPrefsUtil;
+import com.teamwd.chipin.Utils.UserDataProvider;
 import com.teamwd.chipin.Interfaces.Interfaces;
 import com.teamwd.chipin.Models.ModelUser;
 import com.teamwd.chipin.R;
@@ -23,12 +24,14 @@ public class ActivityRegister extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_register);
 
         if(getSupportActionBar() != null)
             getSupportActionBar().hide();
 
         firstNameField = findViewById(R.id.edit_first_name);
+        lastNameField = findViewById(R.id.edit_last_name);
+        emailField = findViewById(R.id.edit_email);
         passwordField = findViewById(R.id.edit_password);
         registerButton = findViewById(R.id.button_register);
 
@@ -43,9 +46,14 @@ public class ActivityRegister extends AppCompatActivity {
                 String lastName = lastNameField.getText().toString();
                 String email = firstNameField.getText().toString();
                 String password = passwordField.getText().toString();
-                UserDataProvider.getInstance(getBaseContext()).addUser(new ModelUser(firstName, "pavs", "pavs.com"), new Interfaces.DataProviderCallback() {
+
+
+                final ModelUser newUser = new ModelUser(firstName, lastName, email, password);
+
+                UserDataProvider.getInstance(getBaseContext()).addUser(newUser, new Interfaces.DataProviderCallback() {
                     @Override
                     public void onCompleted() {
+                        SharedPrefsUtil.saveUser(getBaseContext(), newUser);
                         finish();
                     }
 
@@ -54,7 +62,6 @@ public class ActivityRegister extends AppCompatActivity {
 
                     }
                 });
-                //login
             }
         });
     }

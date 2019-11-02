@@ -32,12 +32,17 @@
             android:layout_weight="5"
             android:orientation="vertical">
 
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="@drawable/baseline_person_black_24"/>
+
             <EditText
                 android:id="@+id/edit_first_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableStart="@drawable/baseline_person_black_24"
-                android:drawablePadding="@dimen/padding_large"
+                android:layout_marginStart="42dp"
+                android:layout_marginBottom="@dimen/padding_large"
                 android:hint="First Name" />
 
             <EditText
@@ -45,7 +50,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/item_size_small"
-                android:paddingStart="42dp"
+                android:layout_marginStart="42dp"
                 android:hint="Last Name" />
 
 
@@ -53,6 +58,7 @@
                 android:id="@+id/edit_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/padding_large"
                 android:drawableStart="@drawable/baseline_email_black_24"
                 android:drawablePadding="@dimen/padding_large"
                 android:hint="Email" />
@@ -78,8 +84,7 @@
                 android:id="@+id/button_register"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/padding_large"
-                app:text="Log In"/>
+                app:text="Register"/>
 
         </LinearLayout>
 

@@ -1,4 +1,4 @@
-package com.teamwd.chipin.DataProviders;
+package com.teamwd.chipin.Utils;
 
 import android.content.Context;
 import android.util.Log;
@@ -9,7 +9,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -19,7 +18,6 @@ import com.teamwd.chipin.Models.ModelUser;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Queue;
 
 public class UserDataProvider extends Interfaces {
 

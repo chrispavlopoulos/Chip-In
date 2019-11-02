@@ -1,24 +1,25 @@
 package com.teamwd.chipin.Activities;
 
-import android.app.Application;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.teamwd.chipin.DataProviders.UserDataProvider;
-import com.teamwd.chipin.Interfaces.Interfaces;
 import com.teamwd.chipin.Models.ModelUser;
 import com.teamwd.chipin.R;
+import com.teamwd.chipin.Utils.SharedPrefsUtil;
+import com.teamwd.chipin.Utils.UserDataProvider;
 import com.teamwd.chipin.Views.ChipButton;
 
 public class ActivityLogIn extends AppCompatActivity {
 
-    EditText usernameField;
+    EditText emailField;
     EditText passwordField;
     ChipButton loginButton;
+    TextView registerButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,9 +29,10 @@ public class ActivityLogIn extends AppCompatActivity {
         if(getSupportActionBar() != null)
             getSupportActionBar().hide();
 
-        usernameField = findViewById(R.id.edit_username);
+        emailField = findViewById(R.id.edit_username);
         passwordField = findViewById(R.id.edit_password);
         loginButton = findViewById(R.id.button_login);
+        registerButton = findViewById(R.id.button_register);
 
         setUpOnClicks();
     }
@@ -39,26 +41,35 @@ public class ActivityLogIn extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String username = usernameField.getText().toString();
+                String email = emailField.getText().toString();
                 String password = passwordField.getText().toString();
-                UserDataProvider.getInstance(getBaseContext()).addUser(new ModelUser(username, "pavs", "pavs.com"), new Interfaces.DataProviderCallback() {
-                    @Override
-                    public void onCompleted() {
-                        finish();
-                    }
-
-                    @Override
-                    public void onError(String msg) {
-
-                    }
-                });
-                //login
+                attemptLogIn(email, password);
+            }
+            });
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(ActivityLogIn.this, ActivityRegister.class));
             }
         });
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        ModelUser savedUser = SharedPrefsUtil.getSavedUser(getBaseContext());
+        if(savedUser != null)
+            attemptLogIn(savedUser.getEmail(), savedUser.getPassword());
+    }
+
+    @Override
     public void onBackPressed() {
         finishAffinity();
+    }
+
+    private void attemptLogIn(String email, String password){
+        
+
     }
 }

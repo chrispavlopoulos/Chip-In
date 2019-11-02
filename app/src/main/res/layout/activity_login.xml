@@ -36,13 +36,13 @@
             android:orientation="vertical">
 
             <EditText
-                android:id="@+id/edit_username"
+                android:id="@+id/edit_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/item_size_small"
-                android:drawableStart="@drawable/baseline_person_black_24"
+                android:drawableStart="@drawable/baseline_email_black_24"
                 android:drawablePadding="@dimen/padding_large"
-                android:hint="Username" />
+                android:hint="Email" />
 
             <EditText
                 android:id="@+id/edit_password"
@@ -59,14 +59,25 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="3"
+            android:orientation="vertical"
             android:gravity="center_vertical">
 
             <com.teamwd.chipin.Views.ChipButton
-                android:id="@+id/button_login"
-                android:layout_width="match_parent"
+            android:id="@+id/button_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_large"
+            app:text="Log In"/>
+
+            <TextView
+                android:id="@+id/button_register"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/padding_large"
-                app:text="Log In"/>
+                android:text="Register"
+                android:textColor="@color/colorAccent"
+                android:fontFamily="@font/crimson_text_bold"/>
 
         </LinearLayout>
 
