@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#f2dfa6</color>
     <color name="colorAccent">#466b6d</color>
 
+    <color name="cardViewBackground">#F1EFF1</color>
+
 
     <color name="white">#FFFFFF</color>
     <color name="ivory">#FFFFF0</color>
