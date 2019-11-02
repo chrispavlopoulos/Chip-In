@@ -4,10 +4,10 @@ public class Donation {
 
     private String CharityName;
     private double amount;
-    private String timeInMillis;
+    private long timeInMillis;
     private String EIN;
 
-    public Donation(String charityName, double amount, String timeInMillis, String EIN) {
+    public Donation(String charityName, double amount, long timeInMillis, String EIN) {
         CharityName = charityName;
         this.amount = amount;
         this.timeInMillis = timeInMillis;
@@ -30,11 +30,11 @@ public class Donation {
         this.amount = amount;
     }
 
-    public String getTimeInMillis() {
+    public long getTimeInMillis() {
         return timeInMillis;
     }
 
-    public void setTimeInMillis(String timeInMillis) {
+    public void setTimeInMillis(long timeInMillis) {
         this.timeInMillis = timeInMillis;
     }
 

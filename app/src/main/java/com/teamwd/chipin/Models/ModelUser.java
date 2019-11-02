@@ -46,4 +46,12 @@ public class ModelUser {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public Donation getDonation() {
+        return donation;
+    }
+
+    public void setDonation(Donation donation) {
+        this.donation = donation;
+    }
 }
