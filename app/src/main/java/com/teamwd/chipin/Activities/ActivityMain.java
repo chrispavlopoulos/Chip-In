@@ -37,6 +37,8 @@ public class ActivityMain extends AppCompatActivity {
         bottomNav = findViewById(R.id.bottom_nav_main);
 
         checkLogIn();
+
+        setUpRealm();
         setUpViewPager();
     }
 
@@ -47,6 +49,10 @@ public class ActivityMain extends AppCompatActivity {
             Intent loginIntent = new Intent(ActivityMain.this, ActivityLogIn.class);
             startActivity(loginIntent);
         }
+    }
+
+    private void setUpRealm(){
+        //Realm
     }
 
     private void setUpViewPager() {
