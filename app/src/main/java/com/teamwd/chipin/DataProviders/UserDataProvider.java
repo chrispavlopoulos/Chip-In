@@ -10,6 +10,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -20,6 +21,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
+
+import static com.teamwd.chipin.Activities.ActivityDatabaseTest.getRandString;
 
 public class UserDataProvider extends Interfaces {
 
@@ -96,6 +99,31 @@ public class UserDataProvider extends Interfaces {
                         }
                     }
                 });
+    }
+
+    public void getUser(String emailID, final UserCallback callback){
+        db.collection("users")
+                .document(emailID)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot documentSnapshot = task.getResult();
+                            Map<String, Object> data = documentSnapshot.getData();
+                            ModelUser modelUser = new ModelUser(
+                                    data.get("first").toString(),
+                                    data.get("last").toString(),
+                                    data.get("email").toString(),
+                                    data.get("password").toString()
+                            );
+                            callback.onCompleted(modelUser);
+                        } else {
+                            callback.onError("Error getting documents: " + task.getException().getMessage());
+                        }
+                    }
+                });
+
     }
 
     public ArrayList<ModelUser> getModelUsersList() {
