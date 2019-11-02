@@ -10,14 +10,14 @@ import androidx.annotation.Nullable;
 
 import com.teamwd.chipin.R;
 
-public class UserFragment extends ChipFragment{
+public class OrgFragment extends ChipFragment{
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.context = getContext();
 
-        root = inflater.inflate(R.layout.fragment_user, container, false);
+        root = inflater.inflate(R.layout.fragment_org, container, false);
 
         return root;
     }
