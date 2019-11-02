@@ -9,13 +9,16 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.WriteBatch;
 import com.teamwd.chipin.Interfaces.Interfaces;
 import com.teamwd.chipin.Models.Donation;
 import com.teamwd.chipin.Models.ModelUser;
+import com.teamwd.chipin.Models.Post;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -137,32 +140,27 @@ public class UserDataProvider extends Interfaces {
      * Use this method to add donation for the user
      * Make sure to set donation using modelUser.setDonation
      */
-    public void addDonation(ModelUser modelUser, final DataProviderCallback callback){
-        // Create a new user with a first and last name
-        Map<String, Object> donation = new HashMap<>();
+    public void addDonationList(ModelUser modelUser, final DataProviderCallback callback){
 
-        donation.put("amount", modelUser.getDonation().getAmount());
-        donation.put("charity_name", modelUser.getDonation().getCharityName());
-        donation.put("ein", modelUser.getDonation().getEIN());
-        donation.put("time_in_millis", modelUser.getDonation().getTimeInMillis());
+        // Get a new write batch
+        WriteBatch batch = db.batch();
 
-        // Add a new document with a generated ID
-        db.collection("users").document(modelUser.getEmail())
-                .collection("donations").document(String.valueOf(modelUser.getDonation().getTimeInMillis()))
-                .set(donation)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        callback.onCompleted();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        callback.onError("Error adding document" + e.getMessage());
-                    }
-                });
+        for(Donation donation : modelUser.getDonationList()){
+            DocumentReference donationRef = db.collection("users").document(modelUser.getEmail()).collection("donations").document();
+            batch.set(donationRef, donation);
+        }
 
+        // Commit the batch
+        try{
+            batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    callback.onCompleted();
+                }
+            });
+        }catch (Exception e){
+            callback.onError("Error adding document" + e.getMessage());
+        }
     }
 
     /**
@@ -182,13 +180,17 @@ public class UserDataProvider extends Interfaces {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d("MSG", document.getId() + " => " + document.getData());
                                 Map data = document.getData();
-                                Donation modelUser = new Donation(
-                                        data.get("charity_name").toString(),
+                                if(data == null){
+                                    callback.onError("No donation for user" + task.getException().getMessage());
+                                    return;
+                                }
+                                Donation donation = new Donation(
+                                        data.get("charityName").toString(),
                                         Double.parseDouble(data.get("amount").toString()),
-                                        Long.parseLong(data.get("time_in_millis").toString()),
+                                        Long.parseLong(data.get("timeInMillis").toString()),
                                         data.get("ein").toString()
                                 );
-                                donations.add(modelUser);
+                                donations.add(donation);
                             }
                             callback.onCompleted(donations);
                         } else {
@@ -196,7 +198,68 @@ public class UserDataProvider extends Interfaces {
                         }
                     }
                 });
+    }
 
+    /**
+     * Use this method to add post list for the user
+     * Make sure to set donation using modelUser.setPost
+     */
+    public void addPostList(ModelUser modelUser, final DataProviderCallback callback){
+
+        // Get a new write batch
+        WriteBatch batch = db.batch();
+
+        for(Post post : modelUser.getPostList()){
+            DocumentReference ref = db.collection("users").document(modelUser.getEmail()).collection("posts").document();
+            batch.set(ref, post);
+        }
+
+        // Commit the batch
+        try{
+            batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    callback.onCompleted();
+                }
+            });
+        }catch (Exception e){
+            callback.onError("Error adding document" + e.getMessage());
+        }
+    }
+
+    /**
+     * Gets the list of posts for the user
+     */
+    public void getPosts(String emailID, final PostsCallback callback){
+
+        db.collection("users")
+                .document(emailID)
+                .collection("posts")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            ArrayList<Post> posts = new ArrayList<>();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d("MSG", document.getId() + " => " + document.getData());
+                                Map data = document.getData();
+                                if(data == null){
+                                    callback.onError("No post for user" + task.getException().getMessage());
+                                    return;
+                                }
+                                Post post = new Post(
+                                        data.get("postText").toString(),
+                                        Long.parseLong(data.get("timeInMillis").toString())
+                                );
+                                posts.add(post);
+                            }
+                            callback.onCompleted(posts);
+                        } else {
+                            callback.onError("Error getting documents: " + task.getException().getMessage());
+                        }
+                    }
+                });
     }
 
 }

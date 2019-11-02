@@ -10,6 +10,7 @@ import com.teamwd.chipin.DataProviders.UserDataProvider;
 import com.teamwd.chipin.Interfaces.Interfaces;
 import com.teamwd.chipin.Models.Donation;
 import com.teamwd.chipin.Models.ModelUser;
+import com.teamwd.chipin.Models.Post;
 import com.teamwd.chipin.R;
 
 import java.util.ArrayList;
@@ -68,10 +69,13 @@ public class ActivityDatabaseTest extends AppCompatActivity {
         });
 
 
-        Donation donation = new Donation(getRandString(),getRandDouble(),System.currentTimeMillis(),"EIN_val");
-        modelUser.setDonation(donation);
+        for(int i=0; i< 3; i++){
+            Donation donation = new Donation(getRandString(),getRandDouble(),System.currentTimeMillis(),"EIN_val");
+            modelUser.addDonation(donation);
+        }
 
-        userDataProvider.addDonation(modelUser, new Interfaces.DataProviderCallback() {
+
+        userDataProvider.addDonationList(modelUser, new Interfaces.DataProviderCallback() {
             @Override
             public void onCompleted() {
                 Toast.makeText(ActivityDatabaseTest.this, "Got donation!", Toast.LENGTH_SHORT).show();
@@ -83,10 +87,10 @@ public class ActivityDatabaseTest extends AppCompatActivity {
             }
         });
 
-        userDataProvider.getUser("Chris", new Interfaces.UserCallback() {
+        userDataProvider.getDonations(emailID, new Interfaces.DonationsCallback() {
             @Override
-            public void onCompleted(ModelUser user) {
-                //Toast.makeText(ActivityDatabaseTest.this, "Got user!", Toast.LENGTH_SHORT).show();
+            public void onCompleted(ArrayList<Donation> donations) {
+
             }
 
             @Override
@@ -95,6 +99,36 @@ public class ActivityDatabaseTest extends AppCompatActivity {
             }
         });
 
+
+
+        for(int i=0; i< 3; i++){
+            Post post = new Post(getRandString(),System.currentTimeMillis());
+            modelUser.addPost(post);
+        }
+
+
+        userDataProvider.addPostList(modelUser, new Interfaces.DataProviderCallback() {
+            @Override
+            public void onCompleted() {
+            }
+
+            @Override
+            public void onError(String msg) {
+
+            }
+        });
+
+        userDataProvider.getPosts(emailID, new Interfaces.PostsCallback() {
+            @Override
+            public void onCompleted(ArrayList<Post> posts) {
+
+            }
+
+            @Override
+            public void onError(String msg) {
+
+            }
+        });
 
 
     }

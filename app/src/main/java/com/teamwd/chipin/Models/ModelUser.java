@@ -1,18 +1,24 @@
 package com.teamwd.chipin.Models;
 
+import java.util.ArrayList;
+
 public class ModelUser {
 
     private String firstName;
     private String lastName;
     private String email;
     private String password;
-    private Donation donation;
+    private ArrayList<Donation> donationList;
+    private ArrayList<Post> postList;
+
 
     public ModelUser(String firstName, String lastName, String email, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+        donationList = new ArrayList<>();
+        postList = new ArrayList<>();
     }
 
     public String getPassword() {
@@ -47,14 +53,36 @@ public class ModelUser {
         this.email = email;
     }
 
-    /**
-     * For this to work you must set origin.
-     */
-    public Donation getDonation() {
-        return donation;
+    public ArrayList<Donation> getDonationList() {
+        return donationList;
     }
 
-    public void setDonation(Donation donation) {
-        this.donation = donation;
+    public void addDonation(Donation donation){
+        donationList.add(donation);
     }
+
+    public void removeDonation(Donation donation){
+        donationList.remove(donation);
+    }
+
+    public void setDonationList(ArrayList<Donation> donation) {
+        this.donationList = donation;
+    }
+
+    public ArrayList<Post> getPostList() {
+        return postList;
+    }
+
+    public void setPostList(ArrayList<Post> postList) {
+        this.postList = postList;
+    }
+
+    public void addPost(Post post){
+        postList.add(post);
+    }
+
+    public void removePost(Post post){
+        postList.remove(post);
+    }
+
 }

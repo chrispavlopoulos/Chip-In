@@ -2,24 +2,24 @@ package com.teamwd.chipin.Models;
 
 public class Donation {
 
-    private String CharityName;
+    private String charityName;
     private double amount;
     private long timeInMillis;
     private String EIN;
 
     public Donation(String charityName, double amount, long timeInMillis, String EIN) {
-        CharityName = charityName;
+        this.charityName = charityName;
         this.amount = amount;
         this.timeInMillis = timeInMillis;
         this.EIN = EIN;
     }
 
     public String getCharityName() {
-        return CharityName;
+        return charityName;
     }
 
     public void setCharityName(String charityName) {
-        CharityName = charityName;
+        this.charityName = charityName;
     }
 
     public double getAmount() {
