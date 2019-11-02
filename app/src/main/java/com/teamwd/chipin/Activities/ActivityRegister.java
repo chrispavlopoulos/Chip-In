@@ -50,7 +50,7 @@ public class ActivityRegister extends AppCompatActivity {
 
                 final ModelUser newUser = new ModelUser(firstName, lastName, email, password);
 
-                UserDataProvider.getInstance(getBaseContext()).addUser(newUser, new Interfaces.DataProviderCallback() {
+                UserDataProvider.getInstance().addUser(newUser, new Interfaces.DataProviderCallback() {
                     @Override
                     public void onCompleted() {
                         SharedPrefsUtil.saveUser(getBaseContext(), newUser);

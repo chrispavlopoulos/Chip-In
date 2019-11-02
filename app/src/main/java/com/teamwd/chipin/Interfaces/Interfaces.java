@@ -7,6 +7,11 @@ import java.util.ArrayList;
 
 public class Interfaces {
 
+    public interface Callback{
+        void onSuccess();
+        void onError();
+    }
+
     public interface DataProviderCallback{
         public void onCompleted();
         public void onError(String msg);
