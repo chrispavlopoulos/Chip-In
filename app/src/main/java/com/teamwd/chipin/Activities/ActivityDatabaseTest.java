@@ -83,7 +83,7 @@ public class ActivityDatabaseTest extends AppCompatActivity {
             }
         });
 
-        userDataProvider.getUser("", new Interfaces.UserCallback() {
+        userDataProvider.getUser("Chris", new Interfaces.UserCallback() {
             @Override
             public void onCompleted(ModelUser user) {
                 //Toast.makeText(ActivityDatabaseTest.this, "Got user!", Toast.LENGTH_SHORT).show();

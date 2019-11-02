@@ -109,6 +109,10 @@ public class UserDataProvider extends Interfaces {
                             if (task.isSuccessful()) {
                                 DocumentSnapshot documentSnapshot = task.getResult();
                                 Map<String, Object> data = documentSnapshot.getData();
+                                if(data == null){
+                                    callback.onError("No User found");
+                                    return;
+                                }
                                 ModelUser modelUser = new ModelUser(
                                         data.get("first").toString(),
                                         data.get("last").toString(),
