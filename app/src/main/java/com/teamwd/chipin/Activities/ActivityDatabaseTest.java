@@ -14,6 +14,9 @@ import com.teamwd.chipin.R;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * This activity is to test the DB!
+ */
 public class ActivityDatabaseTest extends AppCompatActivity {
 
     private UserDataProvider userDataProvider;
@@ -54,6 +57,10 @@ public class ActivityDatabaseTest extends AppCompatActivity {
     }
 
 
+    /**
+     * Creates stub code for us to use
+     * @return random 4 char string
+     */
     protected static String getRandString() {
         String SALTCHARS = "qwertyuioplkjhgfdsazxcvbnm";
         StringBuilder salt = new StringBuilder();
