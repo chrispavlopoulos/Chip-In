@@ -11,6 +11,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -132,7 +133,6 @@ public class UserDataProvider extends Interfaces {
         }catch (Exception e){
             callback.onError("Error getting documents: " + e.getMessage());
         }
-
     }
 
 
@@ -261,5 +261,110 @@ public class UserDataProvider extends Interfaces {
                     }
                 });
     }
+
+    /**
+     * Adds the user's score to the DB
+     * @param modelUser Send the most upto date score
+     */
+    public void addScore(ModelUser modelUser, final DataProviderCallback dataProviderCallback){
+        // Create a new user with a first and last name
+        Map<String, Object> user = new HashMap<>();
+
+        user.put("score", modelUser.getScore());
+
+        String documentPath = modelUser.getEmail();
+        //DocumentReference documentReference = db.document(documentPath);
+
+        // Add a new document with a generated ID
+        db.collection("users").document(documentPath)
+                .update(user)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        dataProviderCallback.onCompleted();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        dataProviderCallback.onError("Error adding document" + e.getMessage());
+                    }
+                });
+    }
+
+    public void getScore(String emailID, final ScoreCallback callback){
+        try{
+            db.collection("users")
+                    .document(emailID)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot documentSnapshot = task.getResult();
+                                Map<String, Object> data = documentSnapshot.getData();
+                                if(data == null){
+                                    callback.onError("No User found");
+                                    return;
+                                }
+                                callback.onCompleted(Long.parseLong(data.get("score").toString()));
+                            } else {
+                                callback.onError("Error getting documents: " + task.getException().getMessage());
+                            }
+                        }
+                    });
+        }catch (Exception e){
+            callback.onError("Error getting documents: " + e.getMessage());
+        }
+    }
+
+/*
+    */
+/**
+     * Use this method to add badge list for the user
+     * Make sure to set donation using modelUser.addBadge
+     *//*
+
+    public void addBadgeList(ModelUser modelUser, final DataProviderCallback callback){
+
+        DocumentReference ref = db.collection("users").document("badges");
+        ref.update("badge", modelUser.getBadges());
+    }
+
+    */
+/**
+     * Gets the list of badges for the user
+     *//*
+
+    public void getBadges(String emailID, final BadgeCallback callback){
+
+        db.collection("users")
+                .document(emailID)
+                .collection("badges")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            ArrayList<String> badges = new ArrayList<>();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d("MSG", document.getId() + " => " + document.getData());
+                                Map data = document.getData();
+                                if(data == null){
+                                    callback.onError("No post for user" + task.getException().getMessage());
+                                    return;
+                                }
+                                String badge = "";
+
+                                badges.add(badge);
+                            }
+                            callback.onCompleted(badges);
+                        } else {
+                            callback.onError("Error getting documents: " + task.getException().getMessage());
+                        }
+                    }
+                });
+    }
+*/
 
 }

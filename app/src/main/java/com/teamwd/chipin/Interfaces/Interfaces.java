@@ -27,4 +27,14 @@ public class Interfaces {
         public void onCompleted(ArrayList<Post> posts);
         public void onError(String msg);
     }
+
+    public interface BadgeCallback{
+        public void onCompleted(ArrayList<String> badges);
+        public void onError(String msg);
+    }
+
+    public interface ScoreCallback{
+        public void onCompleted(long score);
+        public void onError(String msg);
+    }
 }

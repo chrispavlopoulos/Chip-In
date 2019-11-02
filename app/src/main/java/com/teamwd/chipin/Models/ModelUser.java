@@ -10,6 +10,8 @@ public class ModelUser {
     private String password;
     private ArrayList<Donation> donationList;
     private ArrayList<Post> postList;
+    private long score;
+    private ArrayList<String> badges;
 
 
     public ModelUser(String firstName, String lastName, String email, String password) {
@@ -19,6 +21,7 @@ public class ModelUser {
         this.password = password;
         donationList = new ArrayList<>();
         postList = new ArrayList<>();
+        badges = new ArrayList<>();
     }
 
     public String getPassword() {
@@ -84,5 +87,30 @@ public class ModelUser {
     public void removePost(Post post){
         postList.remove(post);
     }
+
+    public long getScore() {
+        return score;
+    }
+
+    public void setScore(long score) {
+        this.score = score;
+    }
+
+    public ArrayList<String> getBadges() {
+        return badges;
+    }
+
+    public void setBadges(ArrayList<String> badges) {
+        this.badges = badges;
+    }
+
+    public void addBadge(String badge){
+        badges.add(badge);
+    }
+
+    public void removeBadge(String badge){
+        badges.remove(badge);
+    }
+
 
 }

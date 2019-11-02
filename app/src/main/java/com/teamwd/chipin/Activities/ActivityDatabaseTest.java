@@ -78,7 +78,7 @@ public class ActivityDatabaseTest extends AppCompatActivity {
         userDataProvider.addDonationList(modelUser, new Interfaces.DataProviderCallback() {
             @Override
             public void onCompleted() {
-                Toast.makeText(ActivityDatabaseTest.this, "Got donation!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(ActivityDatabaseTest.this, "Got donation!", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -130,6 +130,56 @@ public class ActivityDatabaseTest extends AppCompatActivity {
             }
         });
 
+        modelUser.setScore((long) getRandDouble());
+        userDataProvider.addScore(modelUser, new Interfaces.DataProviderCallback() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(String msg) {
+
+            }
+        });
+
+        userDataProvider.getScore(emailID, new Interfaces.ScoreCallback() {
+            @Override
+            public void onCompleted(long score) {
+            }
+
+            @Override
+            public void onError(String msg) {
+
+            }
+        });
+
+        for(int i=0; i< 3; i++){
+            modelUser.addBadge(getRandString());
+        }
+        userDataProvider.addBadgeList(modelUser, new Interfaces.DataProviderCallback() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(String msg) {
+
+            }
+        });
+
+        userDataProvider.getBadges(emailID, new Interfaces.BadgeCallback() {
+            @Override
+            public void onCompleted(ArrayList<String> badges) {
+
+            }
+
+            @Override
+            public void onError(String msg) {
+
+            }
+        });
 
     }
 
