@@ -33,7 +33,7 @@ public class SharedPrefsUtil {
         String email = sharedPrefs.getString(PREF_USER_EMAIL, "");
         String password = sharedPrefs.getString(PREF_USER_PASSWORD, "");
 
-        return email.isEmpty() || password.isEmpty()? null: new ModelUser(firstName, secondName, email, password);
+        return email.isEmpty() || password.isEmpty()? null: new ModelUser(firstName, secondName, email, password, false);
     }
 
     public static SharedPreferences getSharedPrefs(Context context){

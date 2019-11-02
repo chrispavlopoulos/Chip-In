@@ -29,7 +29,7 @@ public class ActivityDatabaseTest extends AppCompatActivity {
         setContentView(R.layout.activity_database_test);
 
         String emailID = getRandString() + "@iastate.edu";
-        ModelUser modelUser = new ModelUser(getRandString(),getRandString(), emailID, getRandString());
+        ModelUser modelUser = new ModelUser(getRandString(),getRandString(), emailID, getRandString(), false);
         userDataProvider = UserDataProvider.getInstance(this);
 
         userDataProvider.addUser(modelUser, new Interfaces.DataProviderCallback() {

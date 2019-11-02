@@ -48,7 +48,7 @@ public class ActivityRegister extends AppCompatActivity {
                 String password = passwordField.getText().toString();
 
 
-                final ModelUser newUser = new ModelUser(firstName, lastName, email, password);
+                final ModelUser newUser = new ModelUser(firstName, lastName, email, password, false);
 
                 UserDataProvider.getInstance(getBaseContext()).addUser(newUser, new Interfaces.DataProviderCallback() {
                     @Override

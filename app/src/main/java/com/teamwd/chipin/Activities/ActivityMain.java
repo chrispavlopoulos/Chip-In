@@ -30,6 +30,9 @@ public class ActivityMain extends AppCompatActivity {
 
         checkLogIn();
         setUpViewPager();
+
+        //This is for testing only; comment this if not needed
+        startActivity(new Intent(this, ActivityDatabaseTest.class));
     }
 
     private void checkLogIn(){

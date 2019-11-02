@@ -50,6 +50,7 @@ public class UserDataProvider extends Interfaces {
         user.put("last", modelUser.getLastName());
         user.put("email", modelUser.getEmail());
         user.put("password", modelUser.getPassword());
+        user.put("isCompany", modelUser.isCompany());
 
         String documentPath = modelUser.getEmail();
         //DocumentReference documentReference = db.document(documentPath);
@@ -90,7 +91,8 @@ public class UserDataProvider extends Interfaces {
                                         data.get("first").toString(),
                                         data.get("last").toString(),
                                         data.get("email").toString(),
-                                        data.get("password").toString()
+                                        data.get("password").toString(),
+                                        (Boolean) data.get("isCompany")
                                 );
                                 modelUsersList.add(modelUser);
                             }
@@ -121,7 +123,8 @@ public class UserDataProvider extends Interfaces {
                                         data.get("first").toString(),
                                         data.get("last").toString(),
                                         data.get("email").toString(),
-                                        data.get("password").toString()
+                                        data.get("password").toString(),
+                                        (Boolean) data.get("isCompany")
                                 );
 
                                 callback.onCompleted(modelUser);

@@ -12,16 +12,26 @@ public class ModelUser {
     private ArrayList<Post> postList;
     private long score;
     private ArrayList<String> badges;
+    private boolean isCompany;
 
 
-    public ModelUser(String firstName, String lastName, String email, String password) {
+    public ModelUser(String firstName, String lastName, String email, String password, boolean isCompany) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+        this.isCompany = isCompany;
         donationList = new ArrayList<>();
         postList = new ArrayList<>();
         badges = new ArrayList<>();
+    }
+
+    public boolean isCompany() {
+        return isCompany;
+    }
+
+    public void setCompany(boolean company) {
+        isCompany = company;
     }
 
     public String getPassword() {
