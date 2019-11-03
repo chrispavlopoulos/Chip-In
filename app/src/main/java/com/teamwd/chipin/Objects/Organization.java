@@ -1,9 +1,11 @@
 package com.teamwd.chipin.Objects;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 public class Organization extends RealmObject {
 
+    @PrimaryKey
     private String ein;
     private int orgId;
     private String charityName;

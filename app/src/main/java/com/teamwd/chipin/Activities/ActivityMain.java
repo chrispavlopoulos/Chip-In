@@ -114,7 +114,7 @@ public class ActivityMain extends AppCompatActivity {
 
     private void setUpRealm(){
         Realm.init(getBaseContext());
-        //OrganizationDataProvider.getInstance(getBaseContext()).loadAllOrganizations();
+        //OrganizationDataProvider.getInstance(getBaseContext()).loadAllOrganizations(getBaseContext());
     }
 
     private void setUpViewPager() {
