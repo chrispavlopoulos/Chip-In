@@ -1,6 +1,7 @@
 package com.teamwd.chipin.Fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -20,6 +21,9 @@ import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.teamwd.chipin.Activities.ActivityDatabaseTest;
+import com.teamwd.chipin.Activities.ActivityDonate;
 import com.teamwd.chipin.Interfaces.Interfaces;
 import com.teamwd.chipin.Models.Donation;
 import com.teamwd.chipin.Models.Event;
@@ -41,6 +45,7 @@ public class HomeFragment extends ChipFragment{
     private ArrayList<Donation> donationsList = new ArrayList<>();
     private ArrayList<Event> bestFiveEvents = new ArrayList<>();
     private Context context;
+    private FloatingActionButton floatingActionButton;
 
     @Nullable
     @Override
@@ -50,9 +55,21 @@ public class HomeFragment extends ChipFragment{
         root = inflater.inflate(R.layout.fragment_home, container, false);
         mainRecyclerView = root.findViewById(R.id.recycler_home_view);
         eventRecyclerView = root.findViewById(R.id.recycler_home_featured);
+        floatingActionButton = root.findViewById(R.id.fab);
         userDataProvider = UserDataProvider.getInstance(getContext());
         setUpRecyclerViews();
+        setUpFab();
         return root;
+    }
+
+    private void setUpFab() {
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), ActivityDonate.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public void setUpRecyclerViews(){
