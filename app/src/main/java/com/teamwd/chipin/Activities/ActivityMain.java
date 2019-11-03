@@ -17,9 +17,13 @@ import com.teamwd.chipin.Fragments.HomeFragment;
 import com.teamwd.chipin.Fragments.OrgFragment;
 import com.teamwd.chipin.Fragments.UserFragment;
 import com.teamwd.chipin.Interfaces.Interfaces;
+import com.teamwd.chipin.Models.OrganizationNew;
 import com.teamwd.chipin.Models.ViewPagerAdapter;
 import com.teamwd.chipin.R;
 import com.teamwd.chipin.Utils.OrganizationDataProvider;
+import com.teamwd.chipin.Utils.UserDataProvider;
+
+import java.util.ArrayList;
 
 import io.realm.Realm;
 
@@ -103,18 +107,9 @@ public class ActivityMain extends AppCompatActivity {
 
     private void setUpApp(){
         bottomNav.setVisibility(View.VISIBLE);
-
-        setUpRealm();
         setUpViewPager();
-
         //This is for testing only; comment this if not needed
         //startActivity(new Intent(this, ActivityDatabaseTest.class));
-    }
-
-
-    private void setUpRealm(){
-        Realm.init(getBaseContext());
-        //OrganizationDataProvider.getInstance(getBaseContext()).loadAllOrganizations(getBaseContext());
     }
 
     private void setUpViewPager() {

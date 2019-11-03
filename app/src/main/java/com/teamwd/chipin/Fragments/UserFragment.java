@@ -3,7 +3,6 @@ package com.teamwd.chipin.Fragments;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,24 +13,16 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.firestore.auth.User;
 import com.teamwd.chipin.Interfaces.Interfaces;
 import com.teamwd.chipin.Models.Donation;
 import com.teamwd.chipin.Models.ModelUser;
-import com.teamwd.chipin.Objects.Organization;
 import com.teamwd.chipin.R;
 import com.teamwd.chipin.Utils.UserDataProvider;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
-import io.realm.Realm;
-
-import static com.teamwd.chipin.Activities.ActivityDatabaseTest.getRandDouble;
-import static com.teamwd.chipin.Activities.ActivityDatabaseTest.getRandString;
 import static com.teamwd.chipin.Utils.SharedPrefsUtil.PREF_USER_EMAIL;
 import static com.teamwd.chipin.Utils.SharedPrefsUtil.getSharedPrefs;
 

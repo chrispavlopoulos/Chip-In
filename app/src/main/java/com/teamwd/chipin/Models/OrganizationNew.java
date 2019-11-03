@@ -1,5 +1,7 @@
 package com.teamwd.chipin.Models;
 
+import android.graphics.drawable.GradientDrawable;
+
 public class OrganizationNew {
 
     private String ein;
@@ -20,6 +22,10 @@ public class OrganizationNew {
         this.causeName = causeName;
         this.state = state;
         this.score = score;
+    }
+
+    public OrganizationNew() {
+
     }
 
     public String getEin() {
