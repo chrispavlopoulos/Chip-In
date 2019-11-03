@@ -4,7 +4,9 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
-    android:layout_margin="@dimen/padding_large"
+    android:layout_marginTop="@dimen/padding_large"
+    android:layout_marginStart="@dimen/padding_large"
+    android:layout_marginEnd="@dimen/padding_large"
     app:cardBackgroundColor="@color/white"
     app:cardElevation="6dp"
     android:background="@color/cardViewBackground"
@@ -27,7 +29,7 @@
             android:layout_toEndOf="@id/user_profile_pic_preview"
             android:text="Jacob Laing donated to TeamTrees"
             android:paddingTop="@dimen/padding_medium"
-            android:textSize="12sp"/>
+            android:textSize="16sp"/>
         <TextView
             android:id="@+id/donation_time_stamp"
             android:layout_width="wrap_content"
@@ -35,8 +37,9 @@
             android:layout_toEndOf="@id/user_profile_pic_preview"
             android:layout_below="@id/donation_name"
             android:text="Nov 1, 2019 at 10:12 PM"
-            android:textSize="10sp"/>
+            android:textSize="14sp"/>
         <TextView
+            android:id="@+id/donation_comment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/donation_time_stamp"
@@ -44,7 +47,7 @@
             android:paddingEnd="@dimen/padding_medium"
             android:paddingBottom="@dimen/padding_medium"
             android:text="For the Lorax"
-            android:textSize="14sp"/>
+            android:textSize="18sp"/>
 
     </RelativeLayout>
 
