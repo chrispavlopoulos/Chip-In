@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.firestore.auth.User;
@@ -76,13 +77,15 @@ public class DonationPaymentFragment extends ChipFragment {
 
     boolean isButtonEnabled = true;
     private void buildViews() {
+        TextView title = root.findViewById(R.id.tv_org_name);
+        title.setText(organization.getCharityName());
         final EditText amount = root.findViewById(R.id.amount_et);
         final EditText comments = root.findViewById(R.id.comments_et);
         SharedPreferences sharedPrefs = getSharedPrefs(root.getContext());
         final String email = sharedPrefs.getString(PREF_USER_EMAIL, "");
         final String firstName = sharedPrefs.getString(PREF_USER_FIRST_NAME, "");
         final String lastName = sharedPrefs.getString(PREF_USER_LAST_NAME, "");
-        final String donationTitle = firstName + " " + lastName + " dontated to " + organization.getCharityName();
+        final String donationTitle = firstName + " " + lastName + " donated to " + organization.getCharityName();
 
         ChipButton button = root.findViewById(R.id.donate_button);
 

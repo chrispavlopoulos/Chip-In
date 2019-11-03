@@ -22,6 +22,13 @@
         android:elevation="6dp"
         android:background="@color/transparent"/>
 
+    <com.teamwd.chipin.Views.FluidSearchView
+        android:id="@+id/search_view"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:layout_marginTop="24dp"
+        android:elevation="12dp"/>
+
     <RelativeLayout
         android:id="@+id/wrapper_content"
         android:layout_width="match_parent"
