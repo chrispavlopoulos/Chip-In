@@ -74,16 +74,21 @@ public class HomeFragment extends ChipFragment{
             public void onCompleted(ArrayList<Event> events) {
                 eventsList = events;
                 while (bestFiveEvents.size() < 5) {
+                    if (eventsList.isEmpty()) {
+                        break;
+                    }
                     int rand = ThreadLocalRandom.current().nextInt(0, eventsList.size());
                     if (!bestFiveEvents.contains(eventsList.get(rand))) {
                         bestFiveEvents.add(eventsList.get(rand));
                     }
                 }
-                eventRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-                SnapHelper snapHelper = new PagerSnapHelper();
-                snapHelper.attachToRecyclerView(eventRecyclerView);
-                eventRecyclerView.setAdapter(new RecyclerAdapter2());
-                eventRecyclerView.addItemDecoration(new LinePagerIndicatorDecoration());
+                if (!eventsList.isEmpty()) {
+                    eventRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+                    SnapHelper snapHelper = new PagerSnapHelper();
+                    snapHelper.attachToRecyclerView(eventRecyclerView);
+                    eventRecyclerView.setAdapter(new RecyclerAdapter2());
+                    eventRecyclerView.addItemDecoration(new LinePagerIndicatorDecoration());
+                }
             }
 
             @Override
@@ -313,7 +318,7 @@ public class HomeFragment extends ChipFragment{
 
             ViewHolder2(View itemView) {
                 super(itemView);
-                companyImg = itemView.findViewById(R.id.company_pic_preview);
+                companyImg = itemView.findViewById(R.id.company_feature_img);
                 countdown = itemView.findViewById(R.id.event_countdown);
                 eventTitle = itemView.findViewById(R.id.featured_event_title);
                 eventDescription = itemView.findViewById(R.id.featured_event_description);
