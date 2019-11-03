@@ -73,13 +73,18 @@ public class HomeFragment extends ChipFragment{
             @Override
             public void onCompleted(ArrayList<Event> events) {
                 eventsList = events;
-                while (bestFiveEvents.size() < 5) {
-                    if (eventsList.isEmpty()) {
-                        break;
+                if (eventsList.size() > 5) {
+                    while (bestFiveEvents.size() < 5) {
+                        int rand = ThreadLocalRandom.current().nextInt(0, eventsList.size());
+                        if (!bestFiveEvents.contains(eventsList.get(rand))) {
+                            bestFiveEvents.add(eventsList.get(rand));
+                        }
                     }
-                    int rand = ThreadLocalRandom.current().nextInt(0, eventsList.size());
-                    if (!bestFiveEvents.contains(eventsList.get(rand))) {
-                        bestFiveEvents.add(eventsList.get(rand));
+                } else {
+                    if (eventsList.isEmpty()) {
+                        return;
+                    } else {
+                        bestFiveEvents.addAll(eventsList);
                     }
                 }
                 if (!eventsList.isEmpty()) {
