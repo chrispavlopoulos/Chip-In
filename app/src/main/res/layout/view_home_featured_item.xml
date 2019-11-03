@@ -9,10 +9,9 @@
 
     <TextView
         android:id="@+id/event_countdown"
-        android:text="02:20:12"
+        android:text="02m 20d 12h 30m 16s"
         android:layout_width="wrap_content"
         android:background="@drawable/countdown_background"
-        android:alpha="0.4"
         android:layout_marginTop="@dimen/padding_medium"
         android:textColor="@color/white"
         android:layout_gravity="center"
@@ -59,6 +58,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:padding="@dimen/padding_small"
+        android:maxLines="1"
+        android:ellipsize="end"
         android:text="For the Lorax"
         android:textColor="@color/white"
         android:textSize="20sp" />
@@ -70,6 +71,8 @@
         android:layout_gravity="center"
         android:padding="@dimen/padding_medium"
         android:textAlignment="center"
+        android:maxLines="2"
+        android:ellipsize="end"
         android:text="Mr. Beast will be matching 100% of donations to TeamTrees that are made while this event is active."
         android:textColor="@color/white"
         android:textSize="15sp" />

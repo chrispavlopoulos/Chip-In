@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.teamwd.chipin.Interfaces.Interfaces;
 import com.teamwd.chipin.Models.Donation;
@@ -19,7 +20,11 @@ import com.teamwd.chipin.Models.ModelUser;
 import com.teamwd.chipin.R;
 import com.teamwd.chipin.Utils.UserDataProvider;
 
+import java.text.DateFormat;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 
@@ -28,20 +33,35 @@ import static com.teamwd.chipin.Utils.SharedPrefsUtil.getSharedPrefs;
 
 public class UserFragment extends ChipFragment{
 
+    private TextView noDonationsView;
+    private RecyclerView recyclerView;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private UserDataProvider dataProvider;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.context = getContext();
 
         root = inflater.inflate(R.layout.fragment_user, container, false);
+        noDonationsView = root.findViewById(R.id.no_donations_text);
+        recyclerView = root.findViewById(R.id.rv);
+        swipeRefreshLayout = root.findViewById(R.id.user_swipe);
 
         SharedPreferences sharedPrefs = getSharedPrefs(context);
-        String email = sharedPrefs.getString(PREF_USER_EMAIL, "");
-        UserDataProvider dataProvider = UserDataProvider.getInstance(root.getContext());
+        final String email = sharedPrefs.getString(PREF_USER_EMAIL, "");
+        dataProvider = UserDataProvider.getInstance(root.getContext());
         dataProvider.getDonations(email, new Interfaces.DonationsCallback() {
             @Override
             public void onCompleted(ArrayList<Donation> donations) {
                 setAdapter(donations);
+                if (donations.isEmpty()) {
+                    noDonationsView.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
+                } else {
+                    noDonationsView.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
@@ -61,6 +81,44 @@ public class UserFragment extends ChipFragment{
             }
         });
 
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayout.setRefreshing(true);
+                dataProvider.getDonations(email, new Interfaces.DonationsCallback() {
+                    @Override
+                    public void onCompleted(ArrayList<Donation> donations) {
+                        setAdapter(donations);
+                        if (donations.isEmpty()) {
+                            noDonationsView.setVisibility(View.VISIBLE);
+                            recyclerView.setVisibility(View.GONE);
+                        } else {
+                            noDonationsView.setVisibility(View.GONE);
+                            recyclerView.setVisibility(View.VISIBLE);
+                        }
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                });
+                dataProvider.getUser(email, new Interfaces.UserCallback() {
+                    @Override
+                    public void onCompleted(ModelUser user) {
+                        buildViews(user);
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                });
+            }
+        });
+
         return root;
     }
 
@@ -71,7 +129,7 @@ public class UserFragment extends ChipFragment{
         name.setText(user.getFirstName().substring(0, 1).toUpperCase() + user.getFirstName().substring(1) + " " + user.getLastName().substring(0, 1).toUpperCase() + user.getLastName().substring(1));
 
         TextView xpTV= root.findViewById(R.id.xpTV);
-        xpTV.setText("Earned " + user.getScore()+"xp");
+        xpTV.setText(user.getScore()+" points");
 
 
     }
@@ -84,7 +142,6 @@ public class UserFragment extends ChipFragment{
                 return Long.compare(donation.getTimeInMillis(), t1.getTimeInMillis());
             }
         });
-        RecyclerView recyclerView = root.findViewById(R.id.rv);
         recyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
         UserDonationsAdapter adapter = new UserDonationsAdapter(root.getContext(), donations);
         recyclerView.setAdapter(adapter);
@@ -113,10 +170,14 @@ public class UserFragment extends ChipFragment{
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             final Donation donation = donations.get(position);
-            holder.title.setText(donation.getCharityName());
-            holder.time.setText(donation.getCharityName());
-            holder.comment.setText(donation.getCharityName());
-            holder.donation.setText("$"+ donation.getAmount());
+            holder.title.setText(donation.getDonationTitle());
+            Calendar cal = Calendar.getInstance();
+            DateFormat df = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss aaa");
+            cal.setTimeInMillis(donation.getTimeInMillis());
+            holder.time.setText(df.format(cal.getTime()));
+            holder.comment.setText(donation.getUserComment());
+            NumberFormat formatter = NumberFormat.getCurrencyInstance();
+            holder.donation.setText(formatter.format(donation.getAmount()));
         }
 
         // total number of rows

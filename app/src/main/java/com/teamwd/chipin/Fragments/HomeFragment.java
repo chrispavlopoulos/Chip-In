@@ -6,16 +6,19 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,9 +35,14 @@ import com.teamwd.chipin.Utils.UserDataProvider;
 
 import org.w3c.dom.Text;
 
+import java.text.DateFormat;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 
 public class HomeFragment extends ChipFragment{
 
@@ -46,6 +54,7 @@ public class HomeFragment extends ChipFragment{
     private ArrayList<Event> bestFiveEvents = new ArrayList<>();
     private Context context;
     private FloatingActionButton floatingActionButton;
+    private RelativeLayout progressLayout;
 
     @Nullable
     @Override
@@ -56,6 +65,7 @@ public class HomeFragment extends ChipFragment{
         mainRecyclerView = root.findViewById(R.id.recycler_home_view);
         eventRecyclerView = root.findViewById(R.id.recycler_home_featured);
         floatingActionButton = root.findViewById(R.id.fab);
+        progressLayout = root.findViewById(R.id.progress_layout);
         userDataProvider = UserDataProvider.getInstance(getContext());
         setUpRecyclerViews();
         setUpFab();
@@ -79,10 +89,12 @@ public class HomeFragment extends ChipFragment{
                 donationsList = donations;
                 mainRecyclerView.setLayoutManager(new LinearLayoutManager(context));
                 mainRecyclerView.setAdapter(new RecyclerAdapter());
+                progressLayout.setVisibility(View.GONE);
             }
 
             @Override
             public void onError(String msg) {
+                progressLayout.setVisibility(View.GONE);
                 onError("Error loading donations.");
             }
         });
@@ -266,10 +278,14 @@ public class HomeFragment extends ChipFragment{
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             final Donation donation = donationsList.get(position);
-            holder.title.setText(donation.getCharityName());
-            holder.time.setText(donation.getCharityName());
-            holder.comment.setText(donation.getCharityName());
-            holder.donation.setText("$"+ donation.getAmount());
+            holder.title.setText(donation.getDonationTitle());
+            Calendar cal = Calendar.getInstance();
+            DateFormat df = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss aaa");
+            cal.setTimeInMillis(donation.getTimeInMillis());
+            holder.time.setText(df.format(cal.getTime()));
+            holder.comment.setText(donation.getUserComment());
+            NumberFormat formatter = NumberFormat.getCurrencyInstance();
+            holder.donation.setText(formatter.format(donation.getAmount()));
         }
 
         // total number of rows
@@ -327,6 +343,49 @@ public class HomeFragment extends ChipFragment{
             final Event event = bestFiveEvents.get(position);
             holder.eventTitle.setText(event.getEvenTitle());
             holder.eventDescription.setText(event.getEventDetails());
+            new CountDownTimer(event.getEndTime() - System.currentTimeMillis(), 1000) {
+                @Override
+                public void onTick(long l) {
+                    ArrayList<Long> values = new ArrayList<>();
+                    long days = TimeUnit.MILLISECONDS.toDays(l);
+                    long years = days / 365;
+                    days %= 365;
+                    long months = days / 30;
+                    days %= 30;
+                    long weeks = days / 7;
+                    days %= 7;
+                    long hours = TimeUnit.MILLISECONDS.toHours(l) - TimeUnit.DAYS.toHours(TimeUnit.MILLISECONDS.toDays(l));
+                    long minutes = TimeUnit.MILLISECONDS.toMinutes(l) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(l));
+                    long seconds = TimeUnit.MILLISECONDS.toSeconds(l) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(l));
+                    ArrayList<Object> stringValues = new ArrayList<>();
+                    stringValues.add(years + "Y");
+                    values.add(years);
+                    stringValues.add(months + "M");
+                    values.add(months);
+                    stringValues.add(weeks + "w");
+                    values.add(weeks);
+                    stringValues.add(days + "d");
+                    values.add(days);
+                    stringValues.add(hours + "h");
+                    values.add(hours);
+                    stringValues.add(minutes + "m");
+                    values.add(minutes);
+                    stringValues.add(seconds + "s");
+                    values.add(seconds);
+                    String time = "";
+                    for (int i = 0; i < values.size(); i++) {
+                        if (values.get(i) != 0) {
+                            time += stringValues.get(i) + " ";
+                        }
+                    }
+                    holder.countdown.setText(time.trim());
+                }
+
+                @Override
+                public void onFinish() {
+
+                }
+            }.start();
         }
 
         // total number of rows
