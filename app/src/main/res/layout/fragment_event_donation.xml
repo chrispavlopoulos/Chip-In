@@ -25,9 +25,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/padding_large"
-            android:paddingStart="@dimen/padding_small"
-            android:paddingEnd="@dimen/padding_small">
+            android:padding="@dimen/padding_large">
             <TextView
                 android:id="@+id/event_desc"
                 android:layout_width="match_parent"
@@ -42,7 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/gradient_primary"
-            android:padding="@dimen/padding_small">
+            android:padding="@dimen/padding_large">
             <TextView
                 android:id="@+id/event_title"
                 android:layout_width="match_parent"
@@ -73,7 +71,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/padding_small">
+            android:padding="@dimen/padding_large">
             <TextView
                 android:id="@+id/event_match"
                 android:layout_width="match_parent"
@@ -115,6 +113,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="textCapSentences|textMultiLine"
                 android:maxLines="3"
+                android:lines="3"
                 android:hint="Enter comments"
                 android:gravity="left"/>
 
