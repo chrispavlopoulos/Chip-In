@@ -425,7 +425,8 @@ public class UserDataProvider extends Interfaces {
                                         (long) data.get("amountContributed"),
                                         Float.parseFloat(data.get("percentToMatch").toString()),
                                         (long) data.get("startTime"),
-                                        (long) data.get("endTime")
+                                        (long) data.get("endTime"),
+                                        data.get("goal").toString()
 
                                 );
                                 eventArrayList.add(event);
