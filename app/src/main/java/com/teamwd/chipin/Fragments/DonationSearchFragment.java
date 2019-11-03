@@ -1,20 +1,18 @@
 package com.teamwd.chipin.Fragments;
 
 
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +28,10 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class DonationSearchFragment extends ChipFragment {
+
+    private ArrayList<OrganizationNew> orgsList;//List of all orgs
+    private ArrayList<OrganizationNew> adapterOrgs;//List of filtered orgs
+    private OrgSearchAdapter adapter;
 
     public DonationSearchFragment() {
         // Required empty public constructor
@@ -59,7 +61,9 @@ public class DonationSearchFragment extends ChipFragment {
         userDataProvider.getAllOrgs(new Interfaces.OrgsCallback() {
             @Override
             public void onCompleted(ArrayList<OrganizationNew> organizationNewArrayList) {
+                orgsList = organizationNewArrayList;
                 setUpAdapter(organizationNewArrayList);
+                buildViews();
             }
 
             @Override
@@ -69,6 +73,35 @@ public class DonationSearchFragment extends ChipFragment {
         });
 
         return root;
+    }
+
+    private void buildViews() {
+        EditText editText = root.findViewById(R.id.edit_text);
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                ArrayList<OrganizationNew> results = new ArrayList<>();
+                for(OrganizationNew organization : orgsList){
+                    if(organization.getCharityName().toLowerCase().contains(charSequence))
+                        results.add(organization);
+                }
+
+                adapterOrgs = results;
+                adapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
     }
 
     private void setUpAdapter(ArrayList<OrganizationNew> organizationNewArrayList) {
@@ -82,17 +115,15 @@ public class DonationSearchFragment extends ChipFragment {
 
         RecyclerView recyclerView = root.findViewById(R.id.rv);
         recyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
-        OrgSearchAdapter adapter = new OrgSearchAdapter(organizationNewArrayList);
+        adapterOrgs = organizationNewArrayList;
+        adapter = new OrgSearchAdapter();
         recyclerView.setAdapter(adapter);
     }
 
     class OrgSearchAdapter extends RecyclerView.Adapter<OrgSearchAdapter.OrgViewHolder> {
 
-        private ArrayList<OrganizationNew> organizations;
-
         // data is passed into the constructor
-        OrgSearchAdapter(ArrayList<OrganizationNew> organizations) {
-            this.organizations = organizations;
+        OrgSearchAdapter() {
         }
 
         // inflates the row layout from xml when needed
@@ -105,7 +136,7 @@ public class DonationSearchFragment extends ChipFragment {
         // binds the data to the TextView in each row
         @Override
         public void onBindViewHolder(final OrgViewHolder holder, int position) {
-            final OrganizationNew organizationNew = organizations.get(position);
+            final OrganizationNew organizationNew = adapterOrgs.get(position);
             try {
                 Picasso.with(getContext()).load(organizationNew.getCategoryImage()).into(holder.orgImage);
                 holder.orgCategoryText.setText(organizationNew.getCategoryName());
@@ -119,7 +150,7 @@ public class DonationSearchFragment extends ChipFragment {
         // total number of rows
         @Override
         public int getItemCount() {
-            return organizations.size();
+            return adapterOrgs.size();
         }
 
 
