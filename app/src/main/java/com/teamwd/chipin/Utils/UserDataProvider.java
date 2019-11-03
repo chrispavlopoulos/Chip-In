@@ -166,6 +166,26 @@ public class UserDataProvider extends Interfaces {
         }
     }
 
+    public void addDonationItem(String email, Donation donation, final DataProviderCallback callback){
+
+        // Get a new write batch
+        WriteBatch batch = db.batch();
+        DocumentReference donationRef = db.collection("users").document(email).collection("donations").document();
+        batch.set(donationRef, donation);
+
+        // Commit the batch
+        try{
+            batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    callback.onCompleted();
+                }
+            });
+        }catch (Exception e){
+            callback.onError("Error adding document" + e.getMessage());
+        }
+    }
+
 
     private int counter = 0 ;
     public void getAllDonations(final DonationsListCallback callback){
@@ -405,7 +425,8 @@ public class UserDataProvider extends Interfaces {
                                         (long) data.get("amountContributed"),
                                         Float.parseFloat(data.get("percentToMatch").toString()),
                                         (long) data.get("startTime"),
-                                        (long) data.get("endTime")
+                                        (long) data.get("endTime"),
+                                        data.get("goal").toString()
 
                                 );
                                 eventArrayList.add(event);

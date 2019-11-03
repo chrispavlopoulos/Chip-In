@@ -15,6 +15,7 @@ import com.teamwd.chipin.Models.ModelUser;
 import com.teamwd.chipin.R;
 import com.teamwd.chipin.Utils.SharedPrefsUtil;
 import com.teamwd.chipin.Utils.UserDataProvider;
+import com.teamwd.chipin.Utils.Validator;
 import com.teamwd.chipin.Views.ChipButton;
 
 public class ActivityLogIn extends AppCompatActivity {
@@ -34,6 +35,8 @@ public class ActivityLogIn extends AppCompatActivity {
 
         if (getSupportActionBar() != null)
             getSupportActionBar().hide();
+
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
 
         root = findViewById(R.id.root);
         emailField = findViewById(R.id.edit_email);
@@ -58,7 +61,7 @@ public class ActivityLogIn extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(ActivityLogIn.this, ActivityRegister.class));
-                overridePendingTransition(R.anim.slide_in_bottom, 0);
+                //overridePendingTransition(R.anim.slide_in_bottom, R.anim.hold);
             }
         });
     }
@@ -78,6 +81,20 @@ public class ActivityLogIn extends AppCompatActivity {
     }
 
     private void attemptLogIn(String email, final String password) {
+        String error = "";
+        if(email.isEmpty()){
+            error = "Please enter an email";
+        }else if(password.isEmpty()){
+            error = "Please enter your password";
+        }else if(!Validator.validEmail(email)){
+            error = "Please enter a valid email.";
+        }
+
+        if(!error.isEmpty()){
+            showError(error);
+            return;
+        }
+
 
         UserDataProvider.getInstance(getBaseContext()).getUser(email, new Interfaces.UserCallback() {
             @Override
@@ -126,7 +143,7 @@ public class ActivityLogIn extends AppCompatActivity {
                 .show();
     }
 
-    public static void asyncLogIn(Context context, final Interfaces.Callback callback){
+    public static void asyncLogIn(final Context context, final Interfaces.Callback callback){
         final ModelUser savedUser = SharedPrefsUtil.getSavedUser(context);
         if (savedUser == null) {
             callback.onError();
@@ -139,14 +156,16 @@ public class ActivityLogIn extends AppCompatActivity {
             public void onCompleted(ModelUser user) {
                 if(user.getPassword().equals(savedUser.getPassword()))
                     callback.onSuccess();
-                else
+                else {
+                    SharedPrefsUtil.clearSavedUser(context);
                     callback.onError();
+                }
             }
 
             @Override
             public void onError(String msg) {
-
-
+                SharedPrefsUtil.clearSavedUser(context);
+                callback.onError();
             }
         });
     }

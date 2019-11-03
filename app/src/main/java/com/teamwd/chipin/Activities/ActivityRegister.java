@@ -6,15 +6,18 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.teamwd.chipin.Utils.SharedPrefsUtil;
 import com.teamwd.chipin.Utils.UserDataProvider;
 import com.teamwd.chipin.Interfaces.Interfaces;
 import com.teamwd.chipin.Models.ModelUser;
 import com.teamwd.chipin.R;
+import com.teamwd.chipin.Utils.Validator;
 import com.teamwd.chipin.Views.ChipButton;
 
 public class ActivityRegister extends AppCompatActivity {
 
+    View root;
     EditText firstNameField;
     EditText lastNameField;
     EditText emailField;
@@ -29,6 +32,7 @@ public class ActivityRegister extends AppCompatActivity {
         if(getSupportActionBar() != null)
             getSupportActionBar().hide();
 
+        root = findViewById(R.id.root);
         firstNameField = findViewById(R.id.edit_first_name);
         lastNameField = findViewById(R.id.edit_last_name);
         emailField = findViewById(R.id.edit_email);
@@ -44,9 +48,26 @@ public class ActivityRegister extends AppCompatActivity {
             public void onClick(View view) {
                 String firstName = firstNameField.getText().toString();
                 String lastName = lastNameField.getText().toString();
-                String email = firstNameField.getText().toString();
+                String email = emailField.getText().toString();
                 String password = passwordField.getText().toString();
 
+                String error = "";
+                if(firstName.isEmpty())
+                    error = "Enter your first name";
+                else if(lastName.isEmpty())
+                    error = "Enter your last name";
+                else if(email.isEmpty()){
+                    error = "Enter an email";
+                }else if(password.isEmpty()){
+                    error = "Enter a password";
+                }else if(!Validator.validEmail(email)){
+                    error = "Please enter a valid email";
+                }
+
+                if(!error.isEmpty()){
+                    showError(error);
+                    return;
+                }
 
                 final ModelUser newUser = new ModelUser(firstName, lastName, email, password, false);
 
@@ -64,6 +85,21 @@ public class ActivityRegister extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    public void showError(String errorText) {
+
+        final Snackbar snackbar = Snackbar.make(root, errorText, Snackbar.LENGTH_SHORT);
+
+        snackbar
+                .setAction("CLOSE", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        snackbar.dismiss();
+                    }
+                })
+                .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
+                .show();
     }
 
     @Override

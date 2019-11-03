@@ -11,8 +11,9 @@ public class Event implements Serializable {
     private float percentToMatch;
     private long startTime;
     private long endTime;
+    private String goal;
 
-    public Event(String companyName, String evenTitle, String eventDetails, long amountContributed, float percentToMatch, long startTime, long endTime) {
+    public Event(String companyName, String evenTitle, String eventDetails, long amountContributed, float percentToMatch, long startTime, long endTime, String goal) {
         this.companyName = companyName;
         this.evenTitle = evenTitle;
         this.eventDetails = eventDetails;
@@ -20,6 +21,15 @@ public class Event implements Serializable {
         this.percentToMatch = percentToMatch;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.goal = goal;
+    }
+
+    public String getGoal() {
+        return goal;
+    }
+
+    public void setGoal(String goal) {
+        this.goal = goal;
     }
 
     public String getCompanyName() {

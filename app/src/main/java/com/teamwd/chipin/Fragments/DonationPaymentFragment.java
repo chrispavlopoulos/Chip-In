@@ -51,6 +51,7 @@ public class DonationPaymentFragment extends ChipFragment {
         return root;
     }
 
+    boolean isButtonEnabled = true;
     private void buildViews() {
         final EditText amount = root.findViewById(R.id.amount_et);
         final EditText comments = root.findViewById(R.id.comments_et);
@@ -61,6 +62,7 @@ public class DonationPaymentFragment extends ChipFragment {
         final String donationTitle = firstName + " " + lastName + " dontated to " + organization.getCharityName();
 
         ChipButton button = root.findViewById(R.id.donate_button);
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -68,8 +70,11 @@ public class DonationPaymentFragment extends ChipFragment {
                 if(amount.getText().toString().trim().equals("") || amount.getText().toString().trim().equals("")){
                     Toast.makeText(root.getContext(), "Cannot be empty fields!", Toast.LENGTH_SHORT).show();
                     return;
+                } else if(!isButtonEnabled){
+                    return;
                 }
 
+                isButtonEnabled = false;
                 final Donation donation = new Donation(
                         organization.getCharityName(),
                         Double.valueOf(amount.getText().toString()),
@@ -78,46 +83,21 @@ public class DonationPaymentFragment extends ChipFragment {
 
                 final UserDataProvider dataProvider = UserDataProvider.getInstance(root.getContext());
 
-                dataProvider.getUser(email, new Interfaces.UserCallback() {
+                dataProvider.addDonationItem(email, donation, new Interfaces.DataProviderCallback() {
                     @Override
-                    public void onCompleted(final ModelUser user) {
-
-                        dataProvider.getDonations(email, new Interfaces.DonationsCallback() {
-                            @Override
-                            public void onCompleted(ArrayList<Donation> donations) {
-
-                                ModelUser modelUser = user;
-                                modelUser.setDonationList(donations);
-                                modelUser.addDonation(donation);
-                                dataProvider.addDonationList(modelUser, new Interfaces.DataProviderCallback() {
-                                    @Override
-                                    public void onCompleted() {
-                                        getActivity().finish();
-                                    }
-
-                                    @Override
-                                    public void onError(String msg) {
-                                        Toast.makeText(root.getContext(), "Error: "+ msg, Toast.LENGTH_SHORT).show();
-                                        getActivity().finish();
-                                    }
-                                });
-
-
-                            }
-
-                            @Override
-                            public void onError(String msg) {
-                                Toast.makeText(root.getContext(), "Error: "+ msg, Toast.LENGTH_SHORT).show();
-                                getActivity().finish();
-                            }
-                        });
-
+                    public void onCompleted() {
+                        try{
+                            getActivity().finish();
+                        }catch (Exception e){}
                     }
 
                     @Override
                     public void onError(String msg) {
-                        Toast.makeText(root.getContext(), "Error: "+ msg, Toast.LENGTH_SHORT).show();
-                        getActivity().finish();
+                        try{
+                            Toast.makeText(root.getContext(), "Error: "+ msg, Toast.LENGTH_SHORT).show();
+                            getActivity().finish();
+                        }catch (Exception e){}
+
                     }
                 });
 

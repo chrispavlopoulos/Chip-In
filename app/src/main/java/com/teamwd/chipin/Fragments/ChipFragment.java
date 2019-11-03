@@ -5,6 +5,8 @@ import android.view.View;
 
 import androidx.fragment.app.Fragment;
 
+import com.teamwd.chipin.Activities.ActivityMain;
+
 import io.realm.Realm;
 
 public class ChipFragment extends Fragment {
@@ -14,7 +16,9 @@ public class ChipFragment extends Fragment {
 
     View root;
 
+
     Realm getRealm(){
         return realm == null? (realm = Realm.getDefaultInstance()): realm;
     }
+
 }
