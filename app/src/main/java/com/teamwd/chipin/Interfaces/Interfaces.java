@@ -26,7 +26,7 @@ public class Interfaces {
     }
 
     public interface UserCallback{
-        public void onCompleted(ModelUser users);
+        public void onCompleted(ModelUser user);
         public void onError(String msg);
     }
 
