@@ -36,6 +36,8 @@ public class ActivityLogIn extends AppCompatActivity {
         if (getSupportActionBar() != null)
             getSupportActionBar().hide();
 
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+
         root = findViewById(R.id.root);
         emailField = findViewById(R.id.edit_email);
         passwordField = findViewById(R.id.edit_password);
