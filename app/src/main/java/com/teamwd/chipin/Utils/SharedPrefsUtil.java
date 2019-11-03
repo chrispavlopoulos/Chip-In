@@ -36,6 +36,10 @@ public class SharedPrefsUtil {
         return email.isEmpty() || password.isEmpty()? null: new ModelUser(firstName, secondName, email, password, false);
     }
 
+    public static void clearSavedUser(Context context){
+        saveUser(context, new ModelUser("", "", "", "", false));
+    }
+
     public static SharedPreferences getSharedPrefs(Context context){
         return context.getSharedPreferences(SharedPrefsUtil.DEFAULT_PREFS, Context.MODE_PRIVATE);
     }

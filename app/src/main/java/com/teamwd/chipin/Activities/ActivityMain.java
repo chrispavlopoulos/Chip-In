@@ -2,25 +2,32 @@ package com.teamwd.chipin.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.teamwd.chipin.Fragments.HomeFragment;
 import com.teamwd.chipin.Fragments.OrgFragment;
 import com.teamwd.chipin.Fragments.UserFragment;
 import com.teamwd.chipin.Interfaces.Interfaces;
+import com.teamwd.chipin.Models.ModelUser;
 import com.teamwd.chipin.Models.OrganizationNew;
 import com.teamwd.chipin.Models.ViewPagerAdapter;
 import com.teamwd.chipin.R;
 import com.teamwd.chipin.Utils.OrganizationDataProvider;
+import com.teamwd.chipin.Utils.SharedPrefsUtil;
 import com.teamwd.chipin.Utils.UserDataProvider;
 
 import java.util.ArrayList;
@@ -29,6 +36,8 @@ import io.realm.Realm;
 
 public class ActivityMain extends AppCompatActivity {
 
+    View root;
+    Toolbar toolbar;
     ViewPager viewPager;
     BottomNavigationView bottomNav;
     private static boolean IS_TESTING_DB = false;
@@ -40,11 +49,26 @@ public class ActivityMain extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if(getSupportActionBar() != null)
-            getSupportActionBar().setBackgroundDrawable(ContextCompat.getDrawable(getBaseContext(), R.drawable.gradient_primary));
-
+        root = findViewById(R.id.root);
+        toolbar = findViewById(R.id.toolbar);
         viewPager = findViewById(R.id.view_pager_main);
         bottomNav = findViewById(R.id.bottom_nav_main);
+
+
+        setSupportActionBar(toolbar);
+
+
+        Window window = getWindow();
+        window.setStatusBarColor(ContextCompat.getColor(this, R.color.transparent));
+        window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+
+        int statusBarHeight = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            statusBarHeight = getResources().getDimensionPixelSize(resourceId);
+        }
+
+        //((ViewGroup.MarginLayoutParams) root.getLayoutParams()).topMargin = statusBarHeight;
 
         if(IS_TESTING_DB)
         {
@@ -179,4 +203,11 @@ public class ActivityMain extends AppCompatActivity {
         viewPager.setCurrentItem(1);
     }
 
+    public void logOut() {
+        SharedPrefsUtil.saveUser(getBaseContext(), new ModelUser("", "", "", "", false));
+
+        ActivityLogIn.userLoggedIn = false;
+
+        startLogInActivity();
+    }
 }

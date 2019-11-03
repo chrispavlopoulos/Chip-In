@@ -2,11 +2,11 @@
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/user_swipe"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <androidx.core.widget.NestedScrollView
-        xmlns:tools="http://schemas.android.com/tools"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -20,6 +20,32 @@
                 android:layout_width="match_parent"
                 android:background="@drawable/gradient_primary"
                 android:layout_height="200dp">
+
+                <LinearLayout
+                    android:id="@+id/button_logout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/item_size_small"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.041"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.028" >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/padding_medium"
+                        android:text="Log Out"
+                        android:textColor="@color/white"
+                        android:fontFamily="@font/open_sans_regular"
+                        android:layout_gravity="center_vertical"/>
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/baseline_lock_open_white_24"/>
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/linearLayout"

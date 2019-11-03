@@ -12,6 +12,7 @@
     <color name="secondary_text">#757575</color>
     <color name="icons">#FFFFFF</color>
     <color name="divider">#BDBDBD</color>
+    <color name="transparent">#00FFFFFF</color>
 
     <color name="cardViewBackground">#F1EFF1</color>
 
