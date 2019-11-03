@@ -41,8 +41,7 @@ public class OrganizationDataProvider extends Interfaces {
 
     private static OrganizationDataProvider instance = null;
     private ArrayList<Organization> organizations = new ArrayList<>();
-    private final static String ALL_ORGANIZATIONS_URL = "https://api.data.charitynavigator.org/v2/Organizations?app_id=3b2cf536&app_key=9f4111a9d6a9fe6034f7854d4ce07828";
-    private final static String PAGE_SIZE_PARAM = "&pageSize=1000";
+    private final static String ALL_ORGANIZATIONS_URL = "https://api.data.charitynavigator.org/v2/Organizations?app_id=3b2cf536&app_key=9f4111a9d6a9fe6034f7854d4ce07828&sort=RATING:DESC&pageSize=1000";
     private final static String APP_ID = "3b2cf536";
     private final static String APP_KEY = "9f4111a9d6a9fe6034f7854d4ce07828";
 

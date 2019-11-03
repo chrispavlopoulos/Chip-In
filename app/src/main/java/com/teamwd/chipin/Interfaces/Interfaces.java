@@ -3,6 +3,7 @@ package com.teamwd.chipin.Interfaces;
 import com.teamwd.chipin.Models.Donation;
 import com.teamwd.chipin.Models.Event;
 import com.teamwd.chipin.Models.ModelUser;
+import com.teamwd.chipin.Models.OrganizationNew;
 import com.teamwd.chipin.Models.Post;
 
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ public class Interfaces {
     }
 
     public interface UserCallback{
-        public void onCompleted(ModelUser users);
+        public void onCompleted(ModelUser user);
         public void onError(String msg);
     }
 
@@ -46,6 +47,11 @@ public class Interfaces {
 
     public interface EventsCallback{
         public void onCompleted(ArrayList<Event> events);
+        public void onError(String msg);
+    }
+
+    public interface OrgsCallback{
+        public void onCompleted(ArrayList<OrganizationNew> organizationNewArrayList);
         public void onError(String msg);
     }
 
