@@ -4,14 +4,16 @@ public class Donation {
 
     private String charityName;
     private double amount;
+    private String donationTitle;
+    private String userComment;
     private long timeInMillis;
-    private String EIN;
 
-    public Donation(String charityName, double amount, long timeInMillis, String EIN) {
+    public Donation(String charityName, double amount, String donationTitle, String userComment, long timeInMillis) {
         this.charityName = charityName;
         this.amount = amount;
+        this.donationTitle = donationTitle;
+        this.userComment = userComment;
         this.timeInMillis = timeInMillis;
-        this.EIN = EIN;
     }
 
     public String getCharityName() {
@@ -38,11 +40,19 @@ public class Donation {
         this.timeInMillis = timeInMillis;
     }
 
-    public String getEIN() {
-        return EIN;
+    public String getDonationTitle() {
+        return donationTitle;
     }
 
-    public void setEIN(String EIN) {
-        this.EIN = EIN;
+    public void setDonationTitle(String donationTitle) {
+        this.donationTitle = donationTitle;
+    }
+
+    public String getUserComment() {
+        return userComment;
+    }
+
+    public void setUserComment(String userComment) {
+        this.userComment = userComment;
     }
 }

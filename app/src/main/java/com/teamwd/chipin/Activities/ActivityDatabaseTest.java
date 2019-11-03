@@ -72,7 +72,7 @@ public class ActivityDatabaseTest extends AppCompatActivity {
 
 
         for(int i=0; i< 3; i++){
-            Donation donation = new Donation(getRandString(),getRandDouble(),System.currentTimeMillis(),"EIN_val");
+            Donation donation = new Donation(getRandString(),getRandDouble(),getRandString(), getRandString(), System.currentTimeMillis());
             modelUser.addDonation(donation);
         }
 
