@@ -143,7 +143,7 @@ public class UserFragment extends ChipFragment{
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
-        UserDonationsAdapter adapter = new UserDonationsAdapter(root.getContext(), donations);
+        UserDonationsAdapter adapter = new UserDonationsAdapter(donations);
         recyclerView.setAdapter(adapter);
 
     }
@@ -151,11 +151,9 @@ public class UserFragment extends ChipFragment{
 
     public class UserDonationsAdapter extends RecyclerView.Adapter<UserDonationsAdapter.ViewHolder> {
 
-        private LayoutInflater mInflater;
         ArrayList<Donation> donations;
 
-        UserDonationsAdapter(Context context, ArrayList<Donation> donations) {
-            this.mInflater = LayoutInflater.from(context);
+        UserDonationsAdapter(ArrayList<Donation> donations) {
             this.donations = donations;
         }
 
