@@ -20,6 +20,7 @@ import com.teamwd.chipin.Interfaces.Interfaces;
 import com.teamwd.chipin.Models.Donation;
 import com.teamwd.chipin.Models.Event;
 import com.teamwd.chipin.Models.ModelUser;
+import com.teamwd.chipin.Models.OrganizationNew;
 import com.teamwd.chipin.Models.Post;
 import com.teamwd.chipin.Objects.Organization;
 
@@ -414,6 +415,68 @@ public class UserDataProvider extends Interfaces {
                             eventsCallback.onCompleted(eventArrayList);
                         } else {
                             eventsCallback.onError("Error getting documents: " + task.getException().getMessage());
+                        }
+                    }
+                });
+    }
+
+
+
+    public void addOrgsList(ArrayList<OrganizationNew> organizationNewArrayList, final DataProviderCallback callback){
+
+        // Get a new write batch
+        WriteBatch batch = db.batch();
+
+        for(OrganizationNew organizationNew : organizationNewArrayList){
+            DocumentReference donationRef = db.collection("organizations").document(organizationNew.getEin());
+            batch.set(donationRef, organizationNew);
+        }
+
+        // Commit the batch
+        try{
+            batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    callback.onCompleted();
+                }
+            });
+        }catch (Exception e){
+            callback.onError("Error adding document" + e.getMessage());
+        }
+    }
+
+    public void getAllOrgs(final OrgsCallback orgsCallback){
+
+        db.collection("organizations")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            ArrayList<OrganizationNew> organizationArrayList = new ArrayList<>();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d("MSG", document.getId() + " => " + document.getData());
+                                Map data = document.getData();
+                                if(data == null){
+                                    orgsCallback.onError("No post for user" + task.getException().getMessage());
+                                    return;
+                                }
+                                OrganizationNew organizationNew = new OrganizationNew(
+                                        data.get("ein").toString(),
+                                        data.get("categoryName").toString(),
+                                        data.get("charityName").toString(),
+                                        data.get("mission").toString(),
+                                        data.get("categoryImage").toString(),
+                                        data.get("causeName").toString(),
+                                        data.get("state").toString(),
+                                        Integer.parseInt(data.get("score").toString())
+
+                                );
+                                organizationArrayList.add(organizationNew);
+                            }
+                            orgsCallback.onCompleted(organizationArrayList);
+                        } else {
+                            orgsCallback.onError("Error getting documents: " + task.getException().getMessage());
                         }
                     }
                 });
