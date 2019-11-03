@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,10 +15,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.teamwd.chipin.Activities.ActivityMain;
 import com.teamwd.chipin.Interfaces.Interfaces;
 import com.teamwd.chipin.Models.Donation;
 import com.teamwd.chipin.Models.ModelUser;
 import com.teamwd.chipin.R;
+import com.teamwd.chipin.Utils.SharedPrefsUtil;
 import com.teamwd.chipin.Utils.UserDataProvider;
 
 import java.text.DateFormat;
@@ -34,6 +37,7 @@ import static com.teamwd.chipin.Utils.SharedPrefsUtil.getSharedPrefs;
 public class UserFragment extends ChipFragment{
 
     private TextView noDonationsView;
+    private LinearLayout logOutButton;
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private UserDataProvider dataProvider;
@@ -45,6 +49,7 @@ public class UserFragment extends ChipFragment{
 
         root = inflater.inflate(R.layout.fragment_user, container, false);
         noDonationsView = root.findViewById(R.id.no_donations_text);
+        logOutButton = root.findViewById(R.id.button_logout);
         recyclerView = root.findViewById(R.id.rv);
         swipeRefreshLayout = root.findViewById(R.id.user_swipe);
 
@@ -116,6 +121,15 @@ public class UserFragment extends ChipFragment{
                         swipeRefreshLayout.setRefreshing(false);
                     }
                 });
+            }
+        });
+
+
+        logOutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((ActivityMain) getActivity()).logOut();
+
             }
         });
 

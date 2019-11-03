@@ -17,10 +17,12 @@ import com.teamwd.chipin.Fragments.HomeFragment;
 import com.teamwd.chipin.Fragments.OrgFragment;
 import com.teamwd.chipin.Fragments.UserFragment;
 import com.teamwd.chipin.Interfaces.Interfaces;
+import com.teamwd.chipin.Models.ModelUser;
 import com.teamwd.chipin.Models.OrganizationNew;
 import com.teamwd.chipin.Models.ViewPagerAdapter;
 import com.teamwd.chipin.R;
 import com.teamwd.chipin.Utils.OrganizationDataProvider;
+import com.teamwd.chipin.Utils.SharedPrefsUtil;
 import com.teamwd.chipin.Utils.UserDataProvider;
 
 import java.util.ArrayList;
@@ -179,4 +181,11 @@ public class ActivityMain extends AppCompatActivity {
         viewPager.setCurrentItem(1);
     }
 
+    public void logOut() {
+        SharedPrefsUtil.saveUser(getBaseContext(), new ModelUser("", "", "", "", false));
+
+        ActivityLogIn.userLoggedIn = false;
+
+        startLogInActivity();
+    }
 }
