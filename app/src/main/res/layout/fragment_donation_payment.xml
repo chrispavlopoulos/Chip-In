@@ -32,7 +32,7 @@
             android:includeFontPadding="true"
             android:padding="@dimen/padding_large"
             android:inputType="numberDecimal"
-            android:hint="Enter the amount donate"
+            android:hint="Enter an amount donate"
             android:theme="@style/MyEditText"/>
 
     </com.google.android.material.textfield.TextInputLayout>

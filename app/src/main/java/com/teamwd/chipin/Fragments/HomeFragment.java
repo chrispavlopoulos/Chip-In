@@ -406,12 +406,14 @@ public class HomeFragment extends ChipFragment{
                 countdown = itemView.findViewById(R.id.event_countdown);
                 eventTitle = itemView.findViewById(R.id.featured_event_title);
                 eventDescription = itemView.findViewById(R.id.featured_event_description);
+                itemView.setOnClickListener(this);
             }
 
             @Override
             public void onClick(View view) {
-                Event event = getItem(getAdapterPosition());
-                //showDetailView(result);
+                Intent intent = new Intent(getActivity(), ActivityDonate.class);
+                intent.putExtra("event", getItem(getAdapterPosition()));
+                startActivity(intent);
             }
         }
 
