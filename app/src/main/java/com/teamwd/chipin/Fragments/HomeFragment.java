@@ -59,6 +59,8 @@ public class HomeFragment extends ChipFragment{
     private FloatingActionButton floatingActionButton;
     private RelativeLayout progressLayout;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private RecyclerAdapter adapter;
+    private RecyclerAdapter2 adapter2;
 
     @Nullable
     @Override
@@ -75,7 +77,7 @@ public class HomeFragment extends ChipFragment{
             @Override
             public void onRefresh() {
                 swipeRefreshLayout.setRefreshing(true);
-                setUpRecyclerViews();
+                updateViews();
             }
         });
         userDataProvider = UserDataProvider.getInstance(getContext());
@@ -94,22 +96,12 @@ public class HomeFragment extends ChipFragment{
         });
     }
 
-    public void setUpRecyclerViews(){
+    public void updateViews() {
         userDataProvider.getAllDonations(new Interfaces.DonationsListCallback() {
             @Override
             public void onCompleted(ArrayList<Donation> donations) {
                 donationsList = donations;
-                Collections.sort(donationsList, new Comparator<Donation>() {
-                    @Override
-                    public int compare(Donation donation, Donation t1) {
-                        return Long.compare(t1.getTimeInMillis(),donation.getTimeInMillis());
-                    }
-                });
-
-
-                mainRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-                mainRecyclerView.setAdapter(new RecyclerAdapter());
-                progressLayout.setVisibility(View.GONE);
+                adapter.notifyDataSetChanged();
                 swipeRefreshLayout.setRefreshing(false);
             }
 
@@ -139,14 +131,7 @@ public class HomeFragment extends ChipFragment{
                         bestFiveEvents.addAll(eventsList);
                     }
                 }
-                if (!eventsList.isEmpty()) {
-                    eventRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-                    SnapHelper snapHelper = new PagerSnapHelper();
-                    snapHelper.attachToRecyclerView(eventRecyclerView);
-                    eventRecyclerView.setOnFlingListener(null);
-                    eventRecyclerView.setAdapter(new RecyclerAdapter2());
-                    eventRecyclerView.addItemDecoration(new LinePagerIndicatorDecoration());
-                }
+                adapter2.notifyDataSetChanged();
                 swipeRefreshLayout.setRefreshing(false);
             }
 
@@ -154,6 +139,70 @@ public class HomeFragment extends ChipFragment{
             public void onError(String msg) {
                 onError("Error loading events.");
                 swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+    }
+
+    public void setUpRecyclerViews(){
+        userDataProvider.getAllDonations(new Interfaces.DonationsListCallback() {
+            @Override
+            public void onCompleted(ArrayList<Donation> donations) {
+                donationsList = donations;
+                Collections.sort(donationsList, new Comparator<Donation>() {
+                    @Override
+                    public int compare(Donation donation, Donation t1) {
+                        return Long.compare(t1.getTimeInMillis(),donation.getTimeInMillis());
+                    }
+                });
+
+
+                mainRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+                adapter = new RecyclerAdapter();
+                mainRecyclerView.setAdapter(adapter);
+                progressLayout.setVisibility(View.GONE);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onError(String msg) {
+                progressLayout.setVisibility(View.GONE);
+                onError("Error loading donations.");
+            }
+        });
+        userDataProvider.getAllEvents(new Interfaces.EventsCallback() {
+            @Override
+            public void onCompleted(ArrayList<Event> events) {
+                eventsList = events;
+                bestFiveEvents = new ArrayList<>();
+                if (eventsList.size() > 5) {
+                    while (bestFiveEvents.size() < 5) {
+                        int rand = ThreadLocalRandom.current().nextInt(0, eventsList.size());
+                        if (!bestFiveEvents.contains(eventsList.get(rand))) {
+                            bestFiveEvents.add(eventsList.get(rand));
+                        }
+                    }
+                } else {
+                    if (eventsList.isEmpty()) {
+                        return;
+                    } else {
+                        bestFiveEvents.addAll(eventsList);
+                    }
+                }
+                if (!eventsList.isEmpty()) {
+                    eventRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+                    SnapHelper snapHelper = new PagerSnapHelper();
+                    snapHelper.attachToRecyclerView(eventRecyclerView);
+                    eventRecyclerView.setOnFlingListener(null);
+                    adapter2 = new RecyclerAdapter2();
+                    eventRecyclerView.setAdapter(adapter2);
+                    adapter2.notifyDataSetChanged();
+                    eventRecyclerView.addItemDecoration(new LinePagerIndicatorDecoration());
+                }
+            }
+
+            @Override
+            public void onError(String msg) {
+                onError("Error loading events.");
             }
         });
     }
