@@ -15,7 +15,7 @@
 
     <color name="cardViewBackground">#F1EFF1</color>
 
-    <color name="textColorPrimary">#4e4e4e</color>
+    <color name="textColorPrimary">#FFFFFF</color>
     <color name="textColorPrimaryMuted">#c2c2c2</color>
 
 
@@ -78,7 +78,7 @@
     <color name="pale_violet_red">#DB7093</color>
     <color name="goldenrod">#DAA520</color>
     <color name="orchid">#DA70D6</color>
-    <color name="thistle">#D8BFD8</color>
+    <color name="thistle">#E0D0E0</color>
     <color name="light_grey">#D3D3D3</color>
     <color name="tan">#D2B48C</color>
     <color name="chocolate">#D2691E</color>
