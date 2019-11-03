@@ -361,6 +361,22 @@ public class HomeFragment extends ChipFragment{
             holder.comment.setText(donation.getUserComment());
             NumberFormat formatter = NumberFormat.getCurrencyInstance();
             holder.donation.setText(formatter.format(donation.getAmount()));
+
+            holder.shareImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String donationText = holder.title.getText() + "\n";
+                    donationText += holder.time.getText()+ "\n\n";
+                    donationText += holder.comment.getText()+ "\n\n";
+                    donationText += holder.donation.getText();
+
+                    Intent sendIntent = new Intent();
+                    sendIntent.setAction(Intent.ACTION_SEND);
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, donationText);
+                    sendIntent.setType("text/plain");
+                    startActivity(Intent.createChooser(sendIntent, "Share"));
+                }
+            });
         }
 
         // total number of rows
@@ -376,6 +392,7 @@ public class HomeFragment extends ChipFragment{
             TextView time;
             TextView comment;
             TextView donation;
+            View shareImage;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -383,6 +400,7 @@ public class HomeFragment extends ChipFragment{
             time = itemView.findViewById(R.id.donation_time_stamp);
             comment = itemView.findViewById(R.id.donation_comment);
             donation = itemView.findViewById(R.id.donation_amount);
+            shareImage = itemView.findViewById(R.id.wrapper_share_img);
             itemView.setOnClickListener(this);
         }
 
