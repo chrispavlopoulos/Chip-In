@@ -76,7 +76,8 @@ public class UserFragment extends ChipFragment{
     private void buildViews(ModelUser user) {
 
         TextView name= root.findViewById(R.id.user_name);
-        name.setText(user.getFirstName() + " " + user.getLastName());
+
+        name.setText(user.getFirstName().substring(0, 1).toUpperCase() + user.getFirstName().substring(1) + " " + user.getLastName().substring(0, 1).toUpperCase() + user.getLastName().substring(1));
 
         TextView xpTV= root.findViewById(R.id.xpTV);
         xpTV.setText("Earned " + user.getScore()+"xp");
