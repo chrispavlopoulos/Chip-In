@@ -62,14 +62,6 @@ public class ActivityMain extends AppCompatActivity {
         window.setStatusBarColor(ContextCompat.getColor(this, R.color.transparent));
         window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
-        int statusBarHeight = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            statusBarHeight = getResources().getDimensionPixelSize(resourceId);
-        }
-
-        //((ViewGroup.MarginLayoutParams) root.getLayoutParams()).topMargin = statusBarHeight;
-
         if(IS_TESTING_DB)
         {
             Intent intent = new Intent(this, ActivityDatabaseTest.class);
