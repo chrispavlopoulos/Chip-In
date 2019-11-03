@@ -1,11 +1,21 @@
 package com.teamwd.chipin.Fragments;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,12 +24,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.teamwd.chipin.Interfaces.Interfaces;
 import com.teamwd.chipin.Models.Donation;
 import com.teamwd.chipin.Models.ModelUser;
 import com.teamwd.chipin.R;
 import com.teamwd.chipin.Utils.UserDataProvider;
 
+import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -37,6 +53,11 @@ public class UserFragment extends ChipFragment{
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private UserDataProvider dataProvider;
+    private ImageView addImg;
+    private ImageView profileImg;
+    private LinearLayout layoutImg;
+    private boolean isProfileSet = false;
+    private ModelUser user;
 
     @Nullable
     @Override
@@ -47,6 +68,11 @@ public class UserFragment extends ChipFragment{
         noDonationsView = root.findViewById(R.id.no_donations_text);
         recyclerView = root.findViewById(R.id.rv);
         swipeRefreshLayout = root.findViewById(R.id.user_swipe);
+        addImg = root.findViewById(R.id.add_img);
+        profileImg = root.findViewById(R.id.profile_img);
+        layoutImg = root.findViewById(R.id.img_layout);
+
+        handleImgs();
 
         SharedPreferences sharedPrefs = getSharedPrefs(context);
         final String email = sharedPrefs.getString(PREF_USER_EMAIL, "");
@@ -122,8 +148,73 @@ public class UserFragment extends ChipFragment{
         return root;
     }
 
-    private void buildViews(ModelUser user) {
+    public static final int GALLERY_REQUEST_CODE = 1;
+    private void handleImgs() {
 
+        layoutImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(isProfileSet)
+                    return;
+
+                pickFromGallery();
+/*                Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                getIntent.setType("image/*");
+
+                Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                pickIntent.setType("image/*");
+
+                Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
+                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
+
+                startActivityForResult(chooserIntent, PICK_IMAGE);*/
+            }
+        });
+    }
+
+    private void pickFromGallery(){
+        //Create an Intent with action as ACTION_PICK
+        Intent intent=new Intent(Intent.ACTION_PICK);
+        // Sets the type as image/*. This ensures only components of type image are selected
+        intent.setType("image/*");
+        //We pass an extra array with the accepted mime types. This will ensure only components with these MIME types as targeted.
+        String[] mimeTypes = {"image/jpeg", "image/png"};
+        intent.putExtra(Intent.EXTRA_MIME_TYPES,mimeTypes);
+        // Launching the Intent
+        startActivityForResult(intent,GALLERY_REQUEST_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        // Result code is RESULT_OK only if the user selects an Image
+        if (resultCode == Activity.RESULT_OK)
+            switch (requestCode) {
+                case GALLERY_REQUEST_CODE:
+
+                    Uri selectedImage = data.getData();
+                    String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+                    Cursor cursor = root.getContext().getContentResolver().query(selectedImage,
+                            filePathColumn, null, null, null);
+                    cursor.moveToFirst();
+
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    String picturePath = cursor.getString(columnIndex);
+                    cursor.close();
+
+                    Bitmap bitmap = BitmapFactory.decodeFile(picturePath);
+                    profileImg.setImageBitmap(bitmap);
+
+                    break;
+            }
+
+
+    }
+
+    private void buildViews(ModelUser user) {
+        this.user = user;
         TextView name= root.findViewById(R.id.user_name);
 
         name.setText(user.getFirstName().substring(0, 1).toUpperCase() + user.getFirstName().substring(1) + " " + user.getLastName().substring(0, 1).toUpperCase() + user.getLastName().substring(1));
