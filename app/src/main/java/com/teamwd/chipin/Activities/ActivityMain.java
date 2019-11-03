@@ -184,9 +184,4 @@ public class ActivityMain extends AppCompatActivity {
         viewPager.setCurrentItem(1);
     }
 
-    public void openActivity(View view) {
-        Intent myIntent = new Intent(this, ActivityDatabaseTest.class);
-        this.startActivity(myIntent);
-    }
-
 }
