@@ -1,5 +1,6 @@
 package com.teamwd.chipin.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -16,15 +17,20 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.teamwd.chipin.Fragments.DonationSearchFragment;
+import com.teamwd.chipin.Fragments.EventDonationFragment;
+import com.teamwd.chipin.Models.Event;
 import com.teamwd.chipin.R;
 
 public class ActivityDonate extends AppCompatActivity {
+
+    private Event event;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_donate);
-
+        Intent intent = getIntent();
+        event = (Event) intent.getSerializableExtra("event");
         buildViews();
     }
 
@@ -40,7 +46,15 @@ public class ActivityDonate extends AppCompatActivity {
 
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
-        transaction.add(R.id.container, new DonationSearchFragment(),"DonationSearch");
+        if (event == null) {
+            transaction.add(R.id.container, new DonationSearchFragment(),"DonationSearch");
+        } else {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("event", event);
+            EventDonationFragment eventDonationFragment = new EventDonationFragment();
+            eventDonationFragment.setArguments(bundle);
+            transaction.add(R.id.container, eventDonationFragment,"EventDonation");
+        }
         transaction.addToBackStack(null);
         transaction.commit();
     }
@@ -48,6 +62,10 @@ public class ActivityDonate extends AppCompatActivity {
     @Override
     public void onBackPressed(){
         finish();
+    }
+
+    public Event getEvent() {
+        return event;
     }
 
 }

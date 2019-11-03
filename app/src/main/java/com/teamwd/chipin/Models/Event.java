@@ -1,6 +1,8 @@
 package com.teamwd.chipin.Models;
 
-public class Event {
+import java.io.Serializable;
+
+public class Event implements Serializable {
 
     private String companyName;
     private String evenTitle;

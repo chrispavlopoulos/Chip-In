@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        tools:context=".Fragments.DonationPaymentFragment">
+
+        <TextView
+            android:id="@+id/event_org_name"
+            android:text="Organization Name"
+            android:layout_width="match_parent"
+            android:padding="@dimen/padding_large"
+            android:textStyle="bold"
+            android:textColor="@color/primary_dark"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"/>
+
+        <include layout="@layout/divider"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/padding_large"
+            android:paddingStart="@dimen/padding_small"
+            android:paddingEnd="@dimen/padding_small">
+            <TextView
+                android:id="@+id/event_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="5"
+                android:text="This is where the description for your event should go."
+                android:ellipsize="end"
+                android:gravity="left"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/gradient_primary"
+            android:padding="@dimen/padding_small">
+            <TextView
+                android:id="@+id/event_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Team Name"
+                android:textColor="@color/white"
+                android:ellipsize="end"
+                android:gravity="center"/>
+            <TextView
+                android:id="@+id/event_collected"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="1,000,000"
+                android:textColor="@color/accent"
+                android:ellipsize="end"
+                android:textSize="30sp"
+                android:gravity="center"/>
+            <TextView
+                android:id="@+id/event_goal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Goal"
+                android:textColor="@color/white"
+                android:ellipsize="end"
+                android:gravity="center"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_small">
+            <TextView
+                android:id="@+id/event_match"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Matching 75% of all donations"
+                android:ellipsize="end"
+                android:gravity="center"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_small">
+
+            <EditText
+                android:id="@+id/event_donate_amt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="textEnd"
+                android:includeFontPadding="true"
+                android:padding="@dimen/padding_large"
+                android:inputType="numberDecimal"
+                android:hint="Enter an amount to donate"
+                android:gravity="end"
+                android:theme="@style/MyEditText"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <include layout="@layout/divider"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_small">
+
+            <EditText
+                android:id="@+id/event_comments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapSentences|textMultiLine"
+                android:maxLines="3"
+                android:hint="Enter comments"
+                android:gravity="left"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.teamwd.chipin.Views.ChipButton
+            android:id="@+id/donate_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding_xxlarge"
+            android:layout_marginEnd="@dimen/padding_xxlarge"
+            android:layout_marginTop="@dimen/padding_medium"
+            android:layout_marginBottom="@dimen/padding_xxlarge"
+            app:text="Donate"/>
+    </LinearLayout>
+</ScrollView>
