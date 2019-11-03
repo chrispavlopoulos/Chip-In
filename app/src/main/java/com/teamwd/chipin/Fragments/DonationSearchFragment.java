@@ -4,6 +4,8 @@ package com.teamwd.chipin.Fragments;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -43,20 +45,6 @@ public class DonationSearchFragment extends ChipFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         root = inflater.inflate(R.layout.fragment_donation_search, container, false);
-
-        /*Button button = root.findViewById(R.id.temp);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DonationPaymentFragment frag =new DonationPaymentFragment();
-                FragmentManager fragmentManager=getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.container,frag,"DonationPaymentFragment");
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-            }
-        });*/
-
         UserDataProvider userDataProvider = UserDataProvider.getInstance(root.getContext());
         userDataProvider.getAllOrgs(new Interfaces.OrgsCallback() {
             @Override
@@ -122,6 +110,7 @@ public class DonationSearchFragment extends ChipFragment {
 
     class OrgSearchAdapter extends RecyclerView.Adapter<OrgSearchAdapter.OrgViewHolder> {
 
+
         // data is passed into the constructor
         OrgSearchAdapter() {
         }
@@ -135,13 +124,25 @@ public class DonationSearchFragment extends ChipFragment {
 
         // binds the data to the TextView in each row
         @Override
-        public void onBindViewHolder(final OrgViewHolder holder, int position) {
+        public void onBindViewHolder(final OrgViewHolder holder, final int position) {
             final OrganizationNew organizationNew = adapterOrgs.get(position);
             try {
                 Picasso.with(getContext()).load(organizationNew.getCategoryImage()).into(holder.orgImage);
                 holder.orgCategoryText.setText(organizationNew.getCategoryName());
                 holder.orgCauseText.setText(organizationNew.getCauseName());
                 holder.orgNameText.setText(organizationNew.getCharityName());
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        DonationPaymentFragment frag =new DonationPaymentFragment();
+                        frag.setOrg(adapterOrgs.get(position));
+                        FragmentManager fragmentManager=getActivity().getSupportFragmentManager();
+                        FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
+                        fragmentTransaction.replace(R.id.container,frag,"DonationPaymentFragment");
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
+                    }
+                });
             } catch (NullPointerException e) {
                 e.printStackTrace();
             }

@@ -25,12 +25,7 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2px"
-        android:background="@color/divider"
-        android:layout_marginTop="@dimen/padding_large"
-        android:layout_marginBottom="@dimen/padding_large"/>
+    <include layout="@layout/divider"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv"
