@@ -57,6 +57,7 @@ public class HomeFragment extends ChipFragment{
     private FloatingActionButton floatingActionButton;
     private RelativeLayout progressLayout;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private CountDownTimer countDownTimer;
 
     @Nullable
     @Override
@@ -72,6 +73,7 @@ public class HomeFragment extends ChipFragment{
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                countDownTimer.cancel();
                 swipeRefreshLayout.setRefreshing(true);
                 setUpRecyclerViews();
             }
@@ -86,6 +88,7 @@ public class HomeFragment extends ChipFragment{
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                countDownTimer.cancel();
                 Intent intent = new Intent(getActivity(), ActivityDonate.class);
                 startActivity(intent);
             }
@@ -359,7 +362,7 @@ public class HomeFragment extends ChipFragment{
             final Event event = bestFiveEvents.get(position);
             holder.eventTitle.setText(event.getEvenTitle());
             holder.eventDescription.setText(event.getEventDetails());
-            new CountDownTimer(event.getEndTime() - System.currentTimeMillis(), 60000) {
+            countDownTimer = new CountDownTimer(event.getEndTime() - System.currentTimeMillis(), 60000) {
                 @Override
                 public void onTick(long l) {
                     ArrayList<Long> values = new ArrayList<>();
@@ -424,6 +427,7 @@ public class HomeFragment extends ChipFragment{
 
             @Override
             public void onClick(View view) {
+                countDownTimer.cancel();
                 Intent intent = new Intent(getActivity(), ActivityDonate.class);
                 intent.putExtra("event", getItem(getAdapterPosition()));
                 startActivity(intent);
