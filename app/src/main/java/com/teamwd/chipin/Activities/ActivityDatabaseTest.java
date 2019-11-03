@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.teamwd.chipin.Models.Event;
+import com.teamwd.chipin.Models.OrganizationNew;
 import com.teamwd.chipin.Utils.UserDataProvider;
 import com.teamwd.chipin.Interfaces.Interfaces;
 import com.teamwd.chipin.Models.Donation;
@@ -30,6 +31,54 @@ public class ActivityDatabaseTest extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_database_test);
 
+        testUserData();
+
+        userDataProvider = UserDataProvider.getInstance(this);
+
+        ArrayList<OrganizationNew> organizationNewArrayList = new ArrayList<>();
+
+        for(int i=0; i< 5; i++){
+
+            organizationNewArrayList.add(new OrganizationNew(
+                    getRandString(),
+                    getRandString(),
+                    getRandString(),
+                    getRandString(),
+                    getRandString(),
+                    getRandString(),
+                    getRandString(),
+                    123456
+            ));
+
+        }
+
+        userDataProvider.addOrgsList(organizationNewArrayList, new Interfaces.DataProviderCallback() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(String msg) {
+
+            }
+        });
+
+        userDataProvider.getAllOrgs(new Interfaces.OrgsCallback() {
+            @Override
+            public void onCompleted(ArrayList<OrganizationNew> organizationNewArrayList) {
+                
+            }
+
+            @Override
+            public void onError(String msg) {
+
+            }
+        });
+
+    }
+
+    private void testUserData() {
         String emailID = getRandString() + "@iastate.edu";
         ModelUser modelUser = new ModelUser(getRandString(),getRandString(), emailID, getRandString(), false);
         userDataProvider = UserDataProvider.getInstance(this);
@@ -47,16 +96,16 @@ public class ActivityDatabaseTest extends AppCompatActivity {
         });
 
         userDataProvider.getAllUsers(new Interfaces.UserListCallback() {
-             @Override
-             public void onCompleted(ArrayList<ModelUser> user) {
+            @Override
+            public void onCompleted(ArrayList<ModelUser> user) {
 
-             }
+            }
 
-             @Override
-             public void onError(String msg) {
+            @Override
+            public void onError(String msg) {
 
-             }
-            });
+            }
+        });
 
         userDataProvider.getUser(emailID, new Interfaces.UserCallback() {
             @Override
@@ -72,7 +121,7 @@ public class ActivityDatabaseTest extends AppCompatActivity {
 
 
         for(int i=0; i< 3; i++){
-            Donation donation = new Donation(getRandString(),getRandDouble(),System.currentTimeMillis(),"EIN_val");
+            Donation donation = new Donation(getRandString(),getRandDouble(),getRandString(), getRandString(), System.currentTimeMillis());
             modelUser.addDonation(donation);
         }
 

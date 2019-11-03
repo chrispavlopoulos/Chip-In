@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
@@ -41,6 +42,7 @@ public class OrganizationDataProvider extends Interfaces {
     private static OrganizationDataProvider instance = null;
     private ArrayList<Organization> organizations = new ArrayList<>();
     private final static String ALL_ORGANIZATIONS_URL = "https://api.data.charitynavigator.org/v2/Organizations?app_id=3b2cf536&app_key=9f4111a9d6a9fe6034f7854d4ce07828";
+    private final static String PAGE_SIZE_PARAM = "&pageSize=1000";
     private final static String APP_ID = "3b2cf536";
     private final static String APP_KEY = "9f4111a9d6a9fe6034f7854d4ce07828";
 
@@ -54,31 +56,39 @@ public class OrganizationDataProvider extends Interfaces {
     /**
      * Calls api to load in the organizations and save to realm to be accessed by the user
      */
-    public void loadAllOrganizations() {
+    public void loadAllOrganizations(Context context) {
+        RequestQueue queue = Volley.newRequestQueue(context);
+
         StringRequest stringRequest = new StringRequest(Request.Method.GET, ALL_ORGANIZATIONS_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                Realm realm = Realm.getDefaultInstance();
+                realm.beginTransaction();
                 try {
                     JSONArray organizations = new JSONArray(response);
-                    Realm realm = Realm.getDefaultInstance();
                     for (int i = 0; i < organizations.length(); i++) {
                         JSONObject object = organizations.getJSONObject(i);
                         Organization organization = new Organization();
-                        organization.setCharityNavigatorUrl(object.getString("charityNavigationURL"));
+                        if(object.has("charityNavigationURL"))
+                            organization.setCharityNavigatorUrl(object.getString("charityNavigationURL"));
                         organization.setMission(object.getString("mission"));
                         organization.setWebsiteUrl(object.getString("websiteURL"));
                         organization.setTagLine(object.getString("tagLine"));
                         organization.setCharityName(object.getString("charityName"));
                         organization.setEin(object.getString("ein"));
-                        organization.setOrgId(object.getInt("orgID"));
+                        if(object.has("orgID") && !object.isNull("orgID"))
+                            organization.setOrgId(object.getInt("orgID"));
 
                         JSONObject irsObject = object.getJSONObject("irsClassification");
                         IrsClassification irsClassification = new IrsClassification();
                         irsClassification.setDeductibility(irsObject.getString("deductibility"));
                         irsClassification.setSubSection(irsObject.getString("subsection"));
-                        irsClassification.setAssetAmount(irsObject.getInt("assetAmount"));
-                        irsClassification.setIncomeAmount(irsObject.getInt("incomeAmount"));
-                        irsClassification.setFilingRequirement(irsObject.getString("filingRequirement"));
+                        if(object.has("assetAmount") && !object.isNull("assetAmount"))
+                            irsClassification.setAssetAmount(irsObject.getInt("assetAmount"));
+                        if(object.has("incomeAmount") && !object.isNull("incomeAmount"))
+                            irsClassification.setIncomeAmount(irsObject.getInt("incomeAmount"));
+                        if(object.has("filingRequirement") && !object.isNull("filingRequirement"))
+                            irsClassification.setFilingRequirement(irsObject.getString("filingRequirement"));
                         irsClassification.setClassification(irsObject.getString("classification"));
                         irsClassification.setDeductibilityCode(irsObject.getString("deductibilityCode"));
                         organization.setIrsClassification(irsClassification);
@@ -124,13 +134,15 @@ public class OrganizationDataProvider extends Interfaces {
                             organization.setCurrentRating(rating);
                         }
 
-                        realm.beginTransaction();
+
                         realm.copyToRealmOrUpdate(organization);
-                        realm.commitTransaction();
+
                     }
+                    realm.commitTransaction();
                     realm.close();
 
                 } catch (JSONException e) {
+                    realm.close();
                     e.printStackTrace();
                 }
             }
@@ -141,6 +153,6 @@ public class OrganizationDataProvider extends Interfaces {
             }
         });
 
-        
+        queue.add(stringRequest);
     }
 }

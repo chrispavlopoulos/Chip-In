@@ -20,7 +20,9 @@ import com.teamwd.chipin.Interfaces.Interfaces;
 import com.teamwd.chipin.Models.Donation;
 import com.teamwd.chipin.Models.Event;
 import com.teamwd.chipin.Models.ModelUser;
+import com.teamwd.chipin.Models.OrganizationNew;
 import com.teamwd.chipin.Models.Post;
+import com.teamwd.chipin.Objects.Organization;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -230,8 +232,9 @@ public class UserDataProvider extends Interfaces {
                                 Donation donation = new Donation(
                                         data.get("charityName").toString(),
                                         Double.parseDouble(data.get("amount").toString()),
-                                        Long.parseLong(data.get("timeInMillis").toString()),
-                                        data.get("ein").toString()
+                                        data.get("donationTitle").toString(),
+                                        data.get("userComment").toString(),
+                                        Long.parseLong(data.get("timeInMillis").toString())
                                 );
                                 donations.add(donation);
                             }
@@ -361,56 +364,6 @@ public class UserDataProvider extends Interfaces {
         }
     }
 
-
-    /*
-     */
-/**
- * Use this method to add badge list for the user
- * Make sure to set donation using modelUser.addBadge
- *//*
-
-    public void addBadgeList(ModelUser modelUser, final DataProviderCallback callback){
-
-        DocumentReference ref = db.collection("users").document("badges");
-        ref.update("badge", modelUser.getBadges());
-    }
-
-    */
-/**
- * Gets the list of badges for the user
- *//*
-
-    public void getBadges(String emailID, final BadgeCallback callback){
-
-        db.collection("users")
-                .document(emailID)
-                .collection("badges")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            ArrayList<String> badges = new ArrayList<>();
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d("MSG", document.getId() + " => " + document.getData());
-                                Map data = document.getData();
-                                if(data == null){
-                                    callback.onError("No post for user" + task.getException().getMessage());
-                                    return;
-                                }
-                                String badge = "";
-
-                                badges.add(badge);
-                            }
-                            callback.onCompleted(badges);
-                        } else {
-                            callback.onError("Error getting documents: " + task.getException().getMessage());
-                        }
-                    }
-                });
-    }
-*/
-
     public void addEvent(Event event, final DataProviderCallback callback){
 
         // Get a new write batch
@@ -430,11 +383,6 @@ public class UserDataProvider extends Interfaces {
             callback.onError("Error adding document" + e.getMessage());
         }
     }
-
-
-
-
-
 
     public void getAllEvents(final EventsCallback eventsCallback){
 
@@ -470,7 +418,68 @@ public class UserDataProvider extends Interfaces {
                         }
                     }
                 });
+    }
 
+
+
+    public void addOrgsList(ArrayList<OrganizationNew> organizationNewArrayList, final DataProviderCallback callback){
+
+        // Get a new write batch
+        WriteBatch batch = db.batch();
+
+        for(OrganizationNew organizationNew : organizationNewArrayList){
+            DocumentReference donationRef = db.collection("organizations").document(organizationNew.getEin());
+            batch.set(donationRef, organizationNew);
+        }
+
+        // Commit the batch
+        try{
+            batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    callback.onCompleted();
+                }
+            });
+        }catch (Exception e){
+            callback.onError("Error adding document" + e.getMessage());
+        }
+    }
+
+    public void getAllOrgs(final OrgsCallback orgsCallback){
+
+        db.collection("organizations")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            ArrayList<OrganizationNew> organizationArrayList = new ArrayList<>();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d("MSG", document.getId() + " => " + document.getData());
+                                Map data = document.getData();
+                                if(data == null){
+                                    orgsCallback.onError("No post for user" + task.getException().getMessage());
+                                    return;
+                                }
+                                OrganizationNew organizationNew = new OrganizationNew(
+                                        data.get("ein").toString(),
+                                        data.get("categoryName").toString(),
+                                        data.get("charityName").toString(),
+                                        data.get("mission").toString(),
+                                        data.get("categoryImage").toString(),
+                                        data.get("causeName").toString(),
+                                        data.get("state").toString(),
+                                        Integer.parseInt(data.get("score").toString())
+
+                                );
+                                organizationArrayList.add(organizationNew);
+                            }
+                            orgsCallback.onCompleted(organizationArrayList);
+                        } else {
+                            orgsCallback.onError("Error getting documents: " + task.getException().getMessage());
+                        }
+                    }
+                });
     }
 
 }

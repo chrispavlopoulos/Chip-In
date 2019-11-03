@@ -6,6 +6,9 @@
 
     <color name="cardViewBackground">#F1EFF1</color>
 
+    <color name="textColorPrimary">#4e4e4e</color>
+    <color name="textColorPrimaryMuted">#c2c2c2</color>
+
 
     <color name="white">#FFFFFF</color>
     <color name="ivory">#FFFFF0</color>

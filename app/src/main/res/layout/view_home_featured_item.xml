@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="125dp"
+    android:background="@drawable/event_background">
+
+    <ImageView
+        android:id="@+id/company_pic_preview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_medium"
+        android:src="@drawable/baseline_person_black_24"/>
+    <TextView
+        android:id="@+id/featured_event"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/user_profile_pic_preview"
+        android:text="FEATURED EVENT"
+        android:paddingTop="@dimen/padding_medium"
+        android:textSize="14sp"/>
+    <TextView
+        android:id="@+id/event_countdown"
+        android:text="02:20:12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:paddingTop="@dimen/padding_medium"
+        android:paddingEnd="@dimen/padding_large"/>
+
+    <View
+        android:id="@+id/featured_event_divider"
+        android:layout_width="wrap_content"
+        android:background="@color/dim_gray"
+        android:layout_height="1dp"
+        android:layout_alignEnd="@id/featured_event"
+        android:layout_toEndOf="@id/user_profile_pic_preview"
+        android:layout_below="@id/featured_event" />
+    <TextView
+        android:id="@+id/featured_event_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/featured_event_divider"
+        android:layout_toEndOf="@id/user_profile_pic_preview"
+        android:paddingEnd="@dimen/padding_medium"
+        android:textStyle="bold"
+        android:paddingBottom="@dimen/padding_small"
+        android:text="For the Lorax"
+        android:textSize="14sp"/>
+
+    <TextView
+        android:id="@+id/featured_event_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/featured_event_title"
+        android:layout_toEndOf="@id/user_profile_pic_preview"
+        android:paddingEnd="@dimen/padding_medium"
+        android:text="Mr. Beast will be matching 100% of donations to TeamTrees that are made while this event is active."
+        android:textSize="14sp"/>
+
+</RelativeLayout>
