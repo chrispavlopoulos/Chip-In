@@ -170,7 +170,7 @@ public class UserFragment extends ChipFragment{
         Collections.sort(donations, new Comparator<Donation>() {
             @Override
             public int compare(Donation donation, Donation t1) {
-                return Long.compare(donation.getTimeInMillis(), t1.getTimeInMillis());
+                return Long.compare(t1.getTimeInMillis(),donation.getTimeInMillis());
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));

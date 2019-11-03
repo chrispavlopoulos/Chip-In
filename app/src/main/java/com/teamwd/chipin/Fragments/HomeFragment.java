@@ -41,6 +41,8 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
@@ -97,6 +99,14 @@ public class HomeFragment extends ChipFragment{
             @Override
             public void onCompleted(ArrayList<Donation> donations) {
                 donationsList = donations;
+                Collections.sort(donationsList, new Comparator<Donation>() {
+                    @Override
+                    public int compare(Donation donation, Donation t1) {
+                        return Long.compare(t1.getTimeInMillis(),donation.getTimeInMillis());
+                    }
+                });
+
+
                 mainRecyclerView.setLayoutManager(new LinearLayoutManager(context));
                 mainRecyclerView.setAdapter(new RecyclerAdapter());
                 progressLayout.setVisibility(View.GONE);
