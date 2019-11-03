@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.teamwd.chipin.Activities.ActivityDatabaseTest;
@@ -55,6 +56,7 @@ public class HomeFragment extends ChipFragment{
     private Context context;
     private FloatingActionButton floatingActionButton;
     private RelativeLayout progressLayout;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Nullable
     @Override
@@ -66,6 +68,14 @@ public class HomeFragment extends ChipFragment{
         eventRecyclerView = root.findViewById(R.id.recycler_home_featured);
         floatingActionButton = root.findViewById(R.id.fab);
         progressLayout = root.findViewById(R.id.progress_layout);
+        swipeRefreshLayout = root.findViewById(R.id.home_swipe);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayout.setRefreshing(true);
+                setUpRecyclerViews();
+            }
+        });
         userDataProvider = UserDataProvider.getInstance(getContext());
         setUpRecyclerViews();
         setUpFab();
@@ -90,18 +100,21 @@ public class HomeFragment extends ChipFragment{
                 mainRecyclerView.setLayoutManager(new LinearLayoutManager(context));
                 mainRecyclerView.setAdapter(new RecyclerAdapter());
                 progressLayout.setVisibility(View.GONE);
+                swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
             public void onError(String msg) {
                 progressLayout.setVisibility(View.GONE);
                 onError("Error loading donations.");
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
         userDataProvider.getAllEvents(new Interfaces.EventsCallback() {
             @Override
             public void onCompleted(ArrayList<Event> events) {
                 eventsList = events;
+                bestFiveEvents = new ArrayList<>();
                 if (eventsList.size() > 5) {
                     while (bestFiveEvents.size() < 5) {
                         int rand = ThreadLocalRandom.current().nextInt(0, eventsList.size());
@@ -120,14 +133,17 @@ public class HomeFragment extends ChipFragment{
                     eventRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
                     SnapHelper snapHelper = new PagerSnapHelper();
                     snapHelper.attachToRecyclerView(eventRecyclerView);
+                    eventRecyclerView.setOnFlingListener(null);
                     eventRecyclerView.setAdapter(new RecyclerAdapter2());
                     eventRecyclerView.addItemDecoration(new LinePagerIndicatorDecoration());
                 }
+                swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
             public void onError(String msg) {
                 onError("Error loading events.");
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
     }
@@ -343,7 +359,7 @@ public class HomeFragment extends ChipFragment{
             final Event event = bestFiveEvents.get(position);
             holder.eventTitle.setText(event.getEvenTitle());
             holder.eventDescription.setText(event.getEventDetails());
-            new CountDownTimer(event.getEndTime() - System.currentTimeMillis(), 1000) {
+            new CountDownTimer(event.getEndTime() - System.currentTimeMillis(), 60000) {
                 @Override
                 public void onTick(long l) {
                     ArrayList<Long> values = new ArrayList<>();
@@ -356,7 +372,6 @@ public class HomeFragment extends ChipFragment{
                     days %= 7;
                     long hours = TimeUnit.MILLISECONDS.toHours(l) - TimeUnit.DAYS.toHours(TimeUnit.MILLISECONDS.toDays(l));
                     long minutes = TimeUnit.MILLISECONDS.toMinutes(l) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(l));
-                    long seconds = TimeUnit.MILLISECONDS.toSeconds(l) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(l));
                     ArrayList<Object> stringValues = new ArrayList<>();
                     stringValues.add(years + "Y");
                     values.add(years);
@@ -370,8 +385,6 @@ public class HomeFragment extends ChipFragment{
                     values.add(hours);
                     stringValues.add(minutes + "m");
                     values.add(minutes);
-                    stringValues.add(seconds + "s");
-                    values.add(seconds);
                     String time = "";
                     for (int i = 0; i < values.size(); i++) {
                         if (values.get(i) != 0) {
