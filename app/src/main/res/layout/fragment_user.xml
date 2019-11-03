@@ -32,6 +32,7 @@
                     android:src="@drawable/baseline_person_black_36" />
 
                 <TextView
+                    android:id="@+id/user_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -51,6 +52,7 @@
                         android:src="@drawable/ic_badge" />
 
                     <TextView
+                        android:id="@+id/xpTV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Earned 1234xp"

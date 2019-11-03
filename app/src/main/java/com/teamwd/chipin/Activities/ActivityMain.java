@@ -119,6 +119,7 @@ public class ActivityMain extends AppCompatActivity {
 
     private void setUpViewPager() {
         ViewPagerAdapter pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), ViewPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        viewPager.setOffscreenPageLimit(2);
         viewPager.setAdapter(pagerAdapter);
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -134,7 +135,6 @@ public class ActivityMain extends AppCompatActivity {
                 if(lastPosition != -1 && lastPosition != position){
                     selectItem(position);
                 }
-
                 lastPosition = position;
             }
 

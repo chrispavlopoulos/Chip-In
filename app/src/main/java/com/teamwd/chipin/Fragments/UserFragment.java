@@ -3,6 +3,7 @@ package com.teamwd.chipin.Fragments;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,17 +14,24 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.firestore.auth.User;
 import com.teamwd.chipin.Interfaces.Interfaces;
 import com.teamwd.chipin.Models.Donation;
+import com.teamwd.chipin.Models.ModelUser;
 import com.teamwd.chipin.Objects.Organization;
 import com.teamwd.chipin.R;
 import com.teamwd.chipin.Utils.UserDataProvider;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import io.realm.Realm;
 
+import static com.teamwd.chipin.Activities.ActivityDatabaseTest.getRandDouble;
+import static com.teamwd.chipin.Activities.ActivityDatabaseTest.getRandString;
 import static com.teamwd.chipin.Utils.SharedPrefsUtil.PREF_USER_EMAIL;
 import static com.teamwd.chipin.Utils.SharedPrefsUtil.getSharedPrefs;
 
@@ -50,12 +58,40 @@ public class UserFragment extends ChipFragment{
 
             }
         });
+        dataProvider.getUser(email, new Interfaces.UserCallback() {
+            @Override
+            public void onCompleted(ModelUser user) {
+                buildViews(user);
+            }
+
+            @Override
+            public void onError(String msg) {
+
+            }
+        });
 
         return root;
     }
 
+    private void buildViews(ModelUser user) {
+
+        TextView name= root.findViewById(R.id.user_name);
+        name.setText(user.getFirstName() + " " + user.getLastName());
+
+        TextView xpTV= root.findViewById(R.id.xpTV);
+        xpTV.setText("Earned " + user.getScore()+"xp");
+
+
+    }
+
     private void setAdapter(ArrayList<Donation> donations) {
 
+        Collections.sort(donations, new Comparator<Donation>() {
+            @Override
+            public int compare(Donation donation, Donation t1) {
+                return Long.compare(donation.getTimeInMillis(), t1.getTimeInMillis());
+            }
+        });
         RecyclerView recyclerView = root.findViewById(R.id.rv);
         recyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
         UserDonationsAdapter adapter = new UserDonationsAdapter(root.getContext(), donations);
@@ -84,7 +120,7 @@ public class UserFragment extends ChipFragment{
         // binds the data to the TextView in each row
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-            holder.amountTV.setText(String.valueOf(donations.get(position).getAmount()));
+            holder.amountTV.setText("$"+donations.get(position).getAmount());
             holder.charityNameTV.setText(donations.get(position).getCharityName());
         }
 
