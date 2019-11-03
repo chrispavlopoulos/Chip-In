@@ -27,7 +27,7 @@ public class ActivityMain extends AppCompatActivity {
 
     ViewPager viewPager;
     BottomNavigationView bottomNav;
-    private static boolean IS_TESTING_DB = true;
+    private static boolean IS_TESTING_DB = false;
 
     private MenuItem lastCheckedItem = null;
 
