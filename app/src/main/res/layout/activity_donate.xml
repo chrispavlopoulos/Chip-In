@@ -26,7 +26,8 @@
                 android:tint="@color/primary_light"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/round_close_white_36"/>
+                android:src="@drawable/round_close_white_36"
+                android:background="?selectableItemBackgroundBorderless"/>
 
         </androidx.appcompat.widget.Toolbar>
 

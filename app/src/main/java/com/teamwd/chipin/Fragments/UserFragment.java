@@ -240,7 +240,7 @@ public class UserFragment extends ChipFragment{
             TextView time;
             TextView comment;
             TextView donation;
-            ImageView shareImage;
+            View shareImage;
 
 
             ViewHolder(View itemView) {
@@ -249,7 +249,7 @@ public class UserFragment extends ChipFragment{
                 time = itemView.findViewById(R.id.donation_time_stamp);
                 comment = itemView.findViewById(R.id.donation_comment);
                 donation = itemView.findViewById(R.id.donation_amount);
-                shareImage = itemView.findViewById(R.id.share_img);
+                shareImage = itemView.findViewById(R.id.wrapper_share_img);
                 itemView.setOnClickListener(this);
             }
 
