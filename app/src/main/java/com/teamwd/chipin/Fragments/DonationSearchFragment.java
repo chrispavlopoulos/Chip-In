@@ -4,24 +4,32 @@ package com.teamwd.chipin.Fragments;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+import com.teamwd.chipin.Interfaces.Interfaces;
 import com.teamwd.chipin.Models.OrganizationNew;
 import com.teamwd.chipin.R;
+import com.teamwd.chipin.Utils.UserDataProvider;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class DonationSearchFragment extends ChipFragment {
-
 
     public DonationSearchFragment() {
         // Required empty public constructor
@@ -47,34 +55,65 @@ public class DonationSearchFragment extends ChipFragment {
             }
         });*/
 
+        UserDataProvider userDataProvider = UserDataProvider.getInstance(root.getContext());
+        userDataProvider.getAllOrgs(new Interfaces.OrgsCallback() {
+            @Override
+            public void onCompleted(ArrayList<OrganizationNew> organizationNewArrayList) {
+                setUpAdapter(organizationNewArrayList);
+            }
+
+            @Override
+            public void onError(String msg) {
+                Toast.makeText(root.getContext(), msg, Toast.LENGTH_SHORT).show();
+            }
+        });
+
         return root;
     }
 
-    public class OrganizationSearchAdapter extends RecyclerView.Adapter<OrganizationSearchAdapter.ViewHolder> {
+    private void setUpAdapter(ArrayList<OrganizationNew> organizationNewArrayList) {
 
-        private LayoutInflater mInflater;
-        ArrayList<OrganizationNew> organizations;
+        Collections.sort(organizationNewArrayList, new Comparator<OrganizationNew>() {
+            @Override
+            public int compare(OrganizationNew organizationNew, OrganizationNew t1) {
+                return organizationNew.getCharityName().compareTo(t1.getCharityName());
+            }
+        });
 
-        OrganizationSearchAdapter(Context context, ArrayList<OrganizationNew> organizations) {
-            this.mInflater = LayoutInflater.from(context);
+        RecyclerView recyclerView = root.findViewById(R.id.rv);
+        recyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
+        OrgSearchAdapter adapter = new OrgSearchAdapter(organizationNewArrayList);
+        recyclerView.setAdapter(adapter);
+    }
+
+    class OrgSearchAdapter extends RecyclerView.Adapter<OrgSearchAdapter.OrgViewHolder> {
+
+        private ArrayList<OrganizationNew> organizations;
+
+        // data is passed into the constructor
+        OrgSearchAdapter(ArrayList<OrganizationNew> organizations) {
             this.organizations = organizations;
         }
 
         // inflates the row layout from xml when needed
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, final int viewType) {
-            View view = LayoutInflater.from(context).inflate(R.layout.view_item_donation, parent, false);
-            return new ViewHolder(view);
+        public OrgViewHolder onCreateViewHolder(ViewGroup parent, final int viewType) {
+            View view = LayoutInflater.from(root.getContext()).inflate(R.layout.view_item_organization, parent, false);
+            return new OrgViewHolder(view);
         }
 
         // binds the data to the TextView in each row
         @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
-            final OrganizationNew organization = organizations.get(position);
-/*            holder.title.setText(donation.getCharityName());
-            holder.time.setText(donation.getCharityName());
-            holder.comment.setText(donation.getCharityName());
-            holder.donation.setText("$"+ donation.getAmount());*/
+        public void onBindViewHolder(final OrgViewHolder holder, int position) {
+            final OrganizationNew organizationNew = organizations.get(position);
+            try {
+                Picasso.with(getContext()).load(organizationNew.getCategoryImage()).into(holder.orgImage);
+                holder.orgCategoryText.setText(organizationNew.getCategoryName());
+                holder.orgCauseText.setText(organizationNew.getCauseName());
+                holder.orgNameText.setText(organizationNew.getCharityName());
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
         }
 
         // total number of rows
@@ -85,23 +124,22 @@ public class DonationSearchFragment extends ChipFragment {
 
 
         // stores and recycles views as they are scrolled off screen
-        public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-            TextView title;
-            TextView time;
-            TextView comment;
-            TextView donation;
+        private class OrgViewHolder extends RecyclerView.ViewHolder {
 
-            ViewHolder(View itemView) {
+            TextView orgCategoryText;
+            TextView orgCauseText;
+            ImageView orgImage;
+            TextView orgNameText;
+            //rating
+
+            public OrgViewHolder(@NonNull View itemView) {
                 super(itemView);
-                title = itemView.findViewById(R.id.donation_name);
-                time = itemView.findViewById(R.id.donation_time_stamp);
-                comment = itemView.findViewById(R.id.donation_comment);
-                donation = itemView.findViewById(R.id.donation_amount);
-                itemView.setOnClickListener(this);
-            }
 
-            @Override
-            public void onClick(View view) {
+                orgCategoryText = itemView.findViewById(R.id.tv_org_category);
+                orgCauseText = itemView.findViewById(R.id.tv_org_cause);
+                orgImage = itemView.findViewById(R.id.iv_org_image);
+                orgNameText = itemView.findViewById(R.id.tv_org_name);
+
             }
         }
     }
