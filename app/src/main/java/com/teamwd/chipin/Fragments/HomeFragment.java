@@ -112,35 +112,6 @@ public class HomeFragment extends ChipFragment{
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
-        userDataProvider.getAllEvents(new Interfaces.EventsCallback() {
-            @Override
-            public void onCompleted(ArrayList<Event> events) {
-                eventsList = events;
-                bestFiveEvents = new ArrayList<>();
-                if (eventsList.size() > 5) {
-                    while (bestFiveEvents.size() < 5) {
-                        int rand = ThreadLocalRandom.current().nextInt(0, eventsList.size());
-                        if (!bestFiveEvents.contains(eventsList.get(rand))) {
-                            bestFiveEvents.add(eventsList.get(rand));
-                        }
-                    }
-                } else {
-                    if (eventsList.isEmpty()) {
-                        return;
-                    } else {
-                        bestFiveEvents.addAll(eventsList);
-                    }
-                }
-                adapter2.notifyDataSetChanged();
-                swipeRefreshLayout.setRefreshing(false);
-            }
-
-            @Override
-            public void onError(String msg) {
-                onError("Error loading events.");
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
     }
 
     public void setUpRecyclerViews(){
