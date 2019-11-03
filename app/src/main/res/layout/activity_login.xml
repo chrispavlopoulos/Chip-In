@@ -5,7 +5,7 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient_background"
+    android:background="@drawable/gradient_primary"
     tools:context=".Activities.ActivityLogIn">
 
     <LinearLayout
@@ -16,49 +16,83 @@
         android:orientation="vertical"
         android:weightSum="10">
 
-        <TextView
-            android:id="@+id/app_logo"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="3"
-            android:gravity="center"
-            android:text="Chip In"
-            android:textSize="56sp" />
+            android:layout_weight="4"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                app:cardCornerRadius="32dp"
+                app:cardBackgroundColor="@color/orange"
+                android:layout_centerHorizontal="true"
+                android:layout_above="@id/app_logo">
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_donate"
+                    android:tint="@color/white"
+                    android:layout_gravity="center"/>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/app_logo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:gravity="center"
+                android:text="Chip In"
+                android:textColor="@color/white"
+                android:textSize="56sp" />
+
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="2" />
+            android:layout_weight="1" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="2"
-            android:weightSum="2"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:weightSum="2">
 
             <EditText
                 android:id="@+id/edit_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/item_size_small"
+                android:layout_weight="1"
+                android:backgroundTint="@color/white"
                 android:drawableStart="@drawable/baseline_email_black_24"
                 android:drawablePadding="@dimen/padding_large"
-                android:layout_weight="1"
+                android:drawableTint="@color/white"
+                android:hint="Email"
                 android:imeOptions="actionNext"
                 android:inputType="textEmailAddress"
-                android:hint="Email" />
+                android:textColor="@color/white"
+                android:textColorHint="@color/divider" />
 
             <EditText
                 android:id="@+id/edit_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@color/white"
                 android:drawableStart="@drawable/baseline_lock_black_24"
                 android:drawablePadding="@dimen/padding_large"
-                android:layout_weight="1"
-                android:inputType="textPassword"
+                android:drawableTint="@color/white"
+                android:hint="Password"
                 android:imeOptions="actionDone"
-                android:hint="Password" />
+                android:inputType="textPassword"
+                android:textColor="@color/white"
+                android:textColorHint="@color/divider" />
 
         </LinearLayout>
 
@@ -67,15 +101,15 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="3"
-            android:orientation="vertical"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:orientation="vertical">
 
             <com.teamwd.chipin.Views.ChipButton
-            android:id="@+id/button_login"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/padding_large"
-            app:text="Log In"/>
+                android:id="@+id/button_login"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_large"
+                app:text="Log In" />
 
             <TextView
                 android:id="@+id/button_register"
@@ -84,7 +118,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/padding_large"
                 android:text="Register"
-                android:textColor="@color/white"/>
+                android:textColor="@color/white" />
 
         </LinearLayout>
 
