@@ -57,7 +57,6 @@ public class HomeFragment extends ChipFragment{
     private FloatingActionButton floatingActionButton;
     private RelativeLayout progressLayout;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private CountDownTimer countDownTimer;
 
     @Nullable
     @Override
@@ -73,7 +72,6 @@ public class HomeFragment extends ChipFragment{
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                countDownTimer.cancel();
                 swipeRefreshLayout.setRefreshing(true);
                 setUpRecyclerViews();
             }
@@ -88,7 +86,6 @@ public class HomeFragment extends ChipFragment{
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countDownTimer.cancel();
                 Intent intent = new Intent(getActivity(), ActivityDonate.class);
                 startActivity(intent);
             }
@@ -362,46 +359,37 @@ public class HomeFragment extends ChipFragment{
             final Event event = bestFiveEvents.get(position);
             holder.eventTitle.setText(event.getEvenTitle());
             holder.eventDescription.setText(event.getEventDetails());
-            countDownTimer = new CountDownTimer(event.getEndTime() - System.currentTimeMillis(), 60000) {
-                @Override
-                public void onTick(long l) {
-                    ArrayList<Long> values = new ArrayList<>();
-                    long days = TimeUnit.MILLISECONDS.toDays(l);
-                    long years = days / 365;
-                    days %= 365;
-                    long months = days / 30;
-                    days %= 30;
-                    long weeks = days / 7;
-                    days %= 7;
-                    long hours = TimeUnit.MILLISECONDS.toHours(l) - TimeUnit.DAYS.toHours(TimeUnit.MILLISECONDS.toDays(l));
-                    long minutes = TimeUnit.MILLISECONDS.toMinutes(l) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(l));
-                    ArrayList<Object> stringValues = new ArrayList<>();
-                    stringValues.add(years + "Y");
-                    values.add(years);
-                    stringValues.add(months + "M");
-                    values.add(months);
-                    stringValues.add(weeks + "w");
-                    values.add(weeks);
-                    stringValues.add(days + "d");
-                    values.add(days);
-                    stringValues.add(hours + "h");
-                    values.add(hours);
-                    stringValues.add(minutes + "m");
-                    values.add(minutes);
-                    String time = "";
-                    for (int i = 0; i < values.size(); i++) {
-                        if (values.get(i) != 0) {
-                            time += stringValues.get(i) + " ";
-                        }
-                    }
-                    holder.countdown.setText(time.trim());
+            ArrayList<Long> values = new ArrayList<>();
+            long l = event.getEndTime() - System.currentTimeMillis();
+            long days = TimeUnit.MILLISECONDS.toDays(l);
+            long years = days / 365;
+            days %= 365;
+            long months = days / 30;
+            days %= 30;
+            long weeks = days / 7;
+            days %= 7;
+            long hours = TimeUnit.MILLISECONDS.toHours(l) - TimeUnit.DAYS.toHours(TimeUnit.MILLISECONDS.toDays(l));
+            long minutes = TimeUnit.MILLISECONDS.toMinutes(l) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(l));
+            ArrayList<Object> stringValues = new ArrayList<>();
+            stringValues.add(years + "Y");
+            values.add(years);
+            stringValues.add(months + "M");
+            values.add(months);
+            stringValues.add(weeks + "w");
+            values.add(weeks);
+            stringValues.add(days + "d");
+            values.add(days);
+            stringValues.add(hours + "h");
+            values.add(hours);
+            stringValues.add(minutes + "m");
+            values.add(minutes);
+            String time = "";
+            for (int i = 0; i < values.size(); i++) {
+                if (values.get(i) != 0) {
+                    time += stringValues.get(i) + " ";
                 }
-
-                @Override
-                public void onFinish() {
-
-                }
-            }.start();
+            }
+            holder.countdown.setText(time.trim());
         }
 
         // total number of rows
@@ -427,7 +415,6 @@ public class HomeFragment extends ChipFragment{
 
             @Override
             public void onClick(View view) {
-                countDownTimer.cancel();
                 Intent intent = new Intent(getActivity(), ActivityDonate.class);
                 intent.putExtra("event", getItem(getAdapterPosition()));
                 startActivity(intent);
