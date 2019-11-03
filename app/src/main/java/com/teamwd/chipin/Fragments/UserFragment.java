@@ -122,16 +122,33 @@ public class UserFragment extends ChipFragment{
         return root;
     }
 
-    private void buildViews(ModelUser user) {
+    private void buildViews(final ModelUser user) {
 
         TextView name= root.findViewById(R.id.user_name);
 
         name.setText(user.getFirstName().substring(0, 1).toUpperCase() + user.getFirstName().substring(1) + " " + user.getLastName().substring(0, 1).toUpperCase() + user.getLastName().substring(1));
 
-        TextView xpTV= root.findViewById(R.id.xpTV);
-        xpTV.setText(user.getScore()+" points");
+        final TextView pointsTV= root.findViewById(R.id.points_tv);
 
 
+        UserDataProvider userDataProvider = UserDataProvider.getInstance(root.getContext());
+        userDataProvider.getDonations(user.getEmail(), new Interfaces.DonationsCallback() {
+            @Override
+            public void onCompleted(ArrayList<Donation> donations) {
+                double value = 0;
+                for(Donation donation : donations){
+                    value += donation.getAmount();
+                }
+
+                pointsTV.setText(Math.round(value)+" points");
+
+            }
+
+            @Override
+            public void onError(String msg) {
+
+            }
+        });
     }
 
     private void setAdapter(ArrayList<Donation> donations) {

@@ -63,7 +63,7 @@
                             android:tint="@color/accent" />
 
                         <TextView
-                            android:id="@+id/xpTV"
+                            android:id="@+id/points_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="1234 points"
