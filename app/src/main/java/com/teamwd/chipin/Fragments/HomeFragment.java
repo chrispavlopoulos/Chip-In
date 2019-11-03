@@ -252,6 +252,7 @@ public class HomeFragment extends ChipFragment{
             holder.title.setText(donation.getCharityName());
             holder.time.setText(donation.getCharityName());
             holder.comment.setText(donation.getCharityName());
+            holder.donation.setText("$"+ donation.getAmount());
         }
 
         // total number of rows
@@ -266,12 +267,14 @@ public class HomeFragment extends ChipFragment{
             TextView title;
             TextView time;
             TextView comment;
+            TextView donation;
 
         ViewHolder(View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.donation_name);
             time = itemView.findViewById(R.id.donation_time_stamp);
             comment = itemView.findViewById(R.id.donation_comment);
+            donation = itemView.findViewById(R.id.donation_amount);
             itemView.setOnClickListener(this);
         }
 

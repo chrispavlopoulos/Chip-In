@@ -113,16 +113,19 @@ public class UserFragment extends ChipFragment{
 
         // inflates the row layout from xml when needed
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = mInflater.inflate(R.layout.item_user_donation, parent, false);
+        public ViewHolder onCreateViewHolder(ViewGroup parent, final int viewType) {
+            View view = LayoutInflater.from(context).inflate(R.layout.view_item_donation, parent, false);
             return new ViewHolder(view);
         }
 
         // binds the data to the TextView in each row
         @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
-            holder.amountTV.setText("$"+donations.get(position).getAmount());
-            holder.charityNameTV.setText(donations.get(position).getCharityName());
+        public void onBindViewHolder(final ViewHolder holder, int position) {
+            final Donation donation = donations.get(position);
+            holder.title.setText(donation.getCharityName());
+            holder.time.setText(donation.getCharityName());
+            holder.comment.setText(donation.getCharityName());
+            holder.donation.setText("$"+ donation.getAmount());
         }
 
         // total number of rows
@@ -133,14 +136,23 @@ public class UserFragment extends ChipFragment{
 
 
         // stores and recycles views as they are scrolled off screen
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            TextView charityNameTV;
-            TextView amountTV;
+        public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+            TextView title;
+            TextView time;
+            TextView comment;
+            TextView donation;
 
             ViewHolder(View itemView) {
                 super(itemView);
-                charityNameTV = itemView.findViewById(R.id.charity_name);
-                amountTV = itemView.findViewById(R.id.donation_amount);
+                title = itemView.findViewById(R.id.donation_name);
+                time = itemView.findViewById(R.id.donation_time_stamp);
+                comment = itemView.findViewById(R.id.donation_comment);
+                donation = itemView.findViewById(R.id.donation_amount);
+                itemView.setOnClickListener(this);
+            }
+
+            @Override
+            public void onClick(View view) {
             }
         }
     }

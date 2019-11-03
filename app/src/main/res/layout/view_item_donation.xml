@@ -12,8 +12,9 @@
     android:background="@color/cardViewBackground"
     app:cardCornerRadius="@dimen/corner_radius_button">
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
+        android:padding="@dimen/padding_large"
         android:layout_height="wrap_content">
 
         <ImageView
@@ -21,34 +22,61 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/padding_medium"
-            android:src="@drawable/baseline_person_black_24"/>
-        <TextView
-            android:id="@+id/donation_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/user_profile_pic_preview"
-            android:text="Jacob Laing donated to TeamTrees"
-            android:paddingTop="@dimen/padding_medium"
-            android:textSize="16sp"/>
-        <TextView
-            android:id="@+id/donation_time_stamp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/user_profile_pic_preview"
-            android:layout_below="@id/donation_name"
-            android:text="Nov 1, 2019 at 10:12 PM"
-            android:textSize="14sp"/>
-        <TextView
-            android:id="@+id/donation_comment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/donation_time_stamp"
-            android:layout_toEndOf="@id/user_profile_pic_preview"
-            android:paddingEnd="@dimen/padding_medium"
-            android:paddingBottom="@dimen/padding_medium"
-            android:text="For the Lorax"
-            android:textSize="18sp"/>
+            android:src="@drawable/baseline_person_black_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </RelativeLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/donation_amount"
+            app:layout_constraintStart_toEndOf="@+id/user_profile_pic_preview"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/donation_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/user_profile_pic_preview"
+                android:paddingTop="@dimen/padding_medium"
+                android:text="Jacob Laing donated to TeamTrees"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/donation_time_stamp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/donation_name"
+                android:layout_toEndOf="@id/user_profile_pic_preview"
+                android:text="Nov 1, 2019 at 10:12 PM"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/donation_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/donation_time_stamp"
+                android:layout_toEndOf="@id/user_profile_pic_preview"
+                android:paddingEnd="@dimen/padding_medium"
+                android:paddingBottom="@dimen/padding_medium"
+                android:text="For the Lorax"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/donation_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$300"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>
