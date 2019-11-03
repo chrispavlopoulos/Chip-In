@@ -7,13 +7,20 @@
     android:layout_height="match_parent"
     tools:context=".Activities.ActivityMain">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@drawable/gradient_primary"
+        android:elevation="6dp"/>
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="96dp"
-        android:background="@drawable/gradient_primary"
+        android:layout_height="?actionBarSize"
+        android:layout_marginTop="24dp"
         app:titleTextColor="@color/white"
-        android:elevation="6dp"/>
+        android:elevation="6dp"
+        android:background="@color/transparent"/>
 
     <RelativeLayout
         android:id="@+id/wrapper_content"
@@ -39,5 +46,12 @@
             app:menu="@menu/activity_main_menu" />
 
     </RelativeLayout>
+
+    <View
+        android:id="@+id/navigation_background"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/black" />
 
 </RelativeLayout>

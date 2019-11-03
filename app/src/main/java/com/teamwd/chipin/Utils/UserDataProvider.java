@@ -501,4 +501,42 @@ public class UserDataProvider extends Interfaces {
                 });
     }
 
+    public void getOrg(String ein, final OrgCallback callback){
+
+        try{
+            db.collection("organizations")
+                    .document(ein)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot documentSnapshot = task.getResult();
+                                Map<String, Object> data = documentSnapshot.getData();
+                                if(data == null){
+                                    callback.onError("No org found");
+                                    return;
+                                }
+                                OrganizationNew organizationNew = new OrganizationNew(
+                                        data.get("ein").toString(),
+                                        data.get("categoryName").toString(),
+                                        data.get("charityName").toString(),
+                                        data.get("mission").toString(),
+                                        data.get("categoryImage").toString(),
+                                        data.get("causeName").toString(),
+                                        data.get("state").toString(),
+                                        Integer.parseInt(data.get("score").toString())
+                                );
+
+                                callback.onCompleted(organizationNew);
+                            } else {
+                                callback.onError("Error getting documents: " + task.getException().getMessage());
+                            }
+                        }
+                    });
+        }catch (Exception e){
+            callback.onError("Error getting documents: " + e.getMessage());
+        }
+    }
+
 }

@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.teamwd.chipin.Fragments.DonationPaymentFragment;
 import com.teamwd.chipin.Fragments.DonationSearchFragment;
 import com.teamwd.chipin.Fragments.EventDonationFragment;
 import com.teamwd.chipin.Models.Event;
@@ -46,17 +47,33 @@ public class ActivityDonate extends AppCompatActivity {
 
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
-        if (event == null) {
-            transaction.add(R.id.container, new DonationSearchFragment(),"DonationSearch");
-        } else {
+
+        if(event!= null){
             Bundle bundle = new Bundle();
             bundle.putSerializable("event", event);
             EventDonationFragment eventDonationFragment = new EventDonationFragment();
             eventDonationFragment.setArguments(bundle);
             transaction.add(R.id.container, eventDonationFragment,"EventDonation");
+            transaction.commit();
+            return;
         }
-        transaction.addToBackStack(null);
-        transaction.commit();
+
+        String ein = null;
+        if(getIntent().getExtras() != null)
+            ein = getIntent().getExtras().getString("ein");
+        if(ein == null){
+            transaction.add(R.id.container, new DonationSearchFragment(),"DonationSearch");
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }else{
+            DonationPaymentFragment donationPaymentFragment = new DonationPaymentFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("ein", ein);
+            donationPaymentFragment.setArguments(bundle);
+            transaction.add(R.id.container, donationPaymentFragment,"DonationPayment");
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }
     }
 
     @Override

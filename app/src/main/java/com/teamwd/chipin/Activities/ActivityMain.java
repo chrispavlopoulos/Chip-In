@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,8 +37,9 @@ import io.realm.Realm;
 
 public class ActivityMain extends AppCompatActivity {
 
-    View root;
+    View content;
     Toolbar toolbar;
+    View navBarBackground;
     ViewPager viewPager;
     BottomNavigationView bottomNav;
     private static boolean IS_TESTING_DB = false;
@@ -49,32 +51,33 @@ public class ActivityMain extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        root = findViewById(R.id.root);
+        content = findViewById(R.id.wrapper_content);
         toolbar = findViewById(R.id.toolbar);
+        navBarBackground = findViewById(R.id.navigation_background);
         viewPager = findViewById(R.id.view_pager_main);
         bottomNav = findViewById(R.id.bottom_nav_main);
 
 
         setSupportActionBar(toolbar);
 
-
         Window window = getWindow();
         window.setStatusBarColor(ContextCompat.getColor(this, R.color.transparent));
         window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
-        if(IS_TESTING_DB)
-        {
+        addMarginForNavigationBar();
+
+        if (IS_TESTING_DB) {
             Intent intent = new Intent(this, ActivityDatabaseTest.class);
             startActivity(intent);
             return;
         }
 
 
-        if(ActivityLogIn.userLoggedIn) {
+        if (ActivityLogIn.userLoggedIn) {
 
             setUpApp();
 
-        }else{
+        } else {
             bottomNav.setVisibility(View.INVISIBLE);
 
             ActivityLogIn.asyncLogIn(getBaseContext(), new Interfaces.Callback() {
@@ -91,6 +94,21 @@ public class ActivityMain extends AppCompatActivity {
         }
     }
 
+    private void addMarginForNavigationBar() {
+
+        int navigationBarHeight = 0;
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        int usableHeight = metrics.heightPixels;
+        getWindowManager().getDefaultDisplay().getRealMetrics(metrics);
+        int realHeight = metrics.heightPixels;
+        if (realHeight > usableHeight)
+            navigationBarHeight = realHeight - usableHeight;
+
+        ((ViewGroup.MarginLayoutParams) content.getLayoutParams()).bottomMargin = navigationBarHeight;
+        navBarBackground.getLayoutParams().height = navigationBarHeight;
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -105,23 +123,22 @@ public class ActivityMain extends AppCompatActivity {
         if (requestCode == 1) {
             if (resultCode == Activity.RESULT_OK) {
                 setUpApp();
-            }
-            else if(resultCode == Activity.RESULT_CANCELED){
+            } else if (resultCode == Activity.RESULT_CANCELED) {
                 startLogInActivity();
             }
         }
     }
 
     /**
-     *  Only sets the app up if this closes with a result code of 1
+     * Only sets the app up if this closes with a result code of 1
      */
-    private void startLogInActivity(){
+    private void startLogInActivity() {
         Intent intent = new Intent(ActivityMain.this, ActivityLogIn.class);
         overridePendingTransition(R.anim.slide_in_top, 0);
         startActivityForResult(intent, 1);
     }
 
-    private void setUpApp(){
+    private void setUpApp() {
         bottomNav.setVisibility(View.VISIBLE);
         setUpViewPager();
         //This is for testing only; comment this if not needed
@@ -143,20 +160,29 @@ public class ActivityMain extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                if(lastPosition != -1 && lastPosition != position){
+                if (lastPosition != -1 && lastPosition != position) {
                     selectItem(position);
                 }
                 lastPosition = position;
             }
 
-            private void selectItem(int position){
-                if(lastCheckedItem != null){
+            private void selectItem(int position) {
+                if (lastCheckedItem != null) {
                     lastCheckedItem.setChecked(false);
                 }
 
                 MenuItem newItem = bottomNav.getMenu().getItem(position);
                 newItem.setChecked(true);
                 lastCheckedItem = newItem;
+
+
+                if(position == 2){
+                    toolbar.getMenu().getItem(0).setVisible(true);
+                    toolbar.getMenu().getItem(1).setVisible(true);
+                }else{
+                    toolbar.getMenu().getItem(0).setVisible(false);
+                    toolbar.getMenu().getItem(1).setVisible(false);
+                }
             }
 
             @Override
@@ -169,7 +195,7 @@ public class ActivityMain extends AppCompatActivity {
 
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                if(lastCheckedItem != null && menuItem != lastCheckedItem){
+                if (lastCheckedItem != null && menuItem != lastCheckedItem) {
                     lastCheckedItem.setChecked(false);
                 }
 
@@ -201,5 +227,16 @@ public class ActivityMain extends AppCompatActivity {
         ActivityLogIn.userLoggedIn = false;
 
         startLogInActivity();
+    }
+
+    public Toolbar getToolbar() {
+        return toolbar;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.org_menu, menu);
+        return true;
     }
 }

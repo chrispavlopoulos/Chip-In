@@ -1,7 +1,9 @@
 package com.teamwd.chipin.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -14,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.squareup.picasso.Picasso;
+import com.teamwd.chipin.Activities.ActivityDonate;
 import com.teamwd.chipin.Interfaces.Interfaces;
 import com.teamwd.chipin.Models.OrganizationNew;
 
@@ -22,6 +25,8 @@ import com.teamwd.chipin.Utils.OrganizationDataProvider;
 import com.teamwd.chipin.Utils.UserDataProvider;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 
 public class OrgFragment extends ChipFragment{
@@ -105,6 +110,14 @@ public class OrgFragment extends ChipFragment{
                                     UserDataProvider.getInstance(getContext()).getAllOrgs(new Interfaces.OrgsCallback() {
                                         @Override
                                         public void onCompleted(ArrayList<OrganizationNew> organizationNewArrayList) {
+
+                                            Collections.sort(organizationNewArrayList, new Comparator<OrganizationNew>() {
+                                                @Override
+                                                public int compare(OrganizationNew organizationNew, OrganizationNew t1) {
+                                                    return organizationNew.getCharityName().compareTo(t1.getCharityName());
+                                                }
+                                            });
+
                                             organizations = organizationNewArrayList;
                                             adapter = new OrgRecyclerAdapter();
                                             recyclerView.setAdapter(adapter);
@@ -131,6 +144,13 @@ public class OrgFragment extends ChipFragment{
                         }
                     });
                 } else {
+                    Collections.sort(organizationNewArrayList, new Comparator<OrganizationNew>() {
+                        @Override
+                        public int compare(OrganizationNew organizationNew, OrganizationNew t1) {
+                            return organizationNew.getCharityName().compareTo(t1.getCharityName());
+                        }
+                    });
+
                     organizations = organizationNewArrayList;
                     adapter = new OrgRecyclerAdapter();
                     recyclerView.setAdapter(adapter);
@@ -159,13 +179,21 @@ public class OrgFragment extends ChipFragment{
 
         // binds the data to the TextView in each row
         @Override
-        public void onBindViewHolder(final OrgViewHolder holder, int position) {
+        public void onBindViewHolder(final OrgViewHolder holder, final int position) {
             final OrganizationNew organizationNew = organizations.get(position);
             try {
                 Picasso.with(getContext()).load(organizationNew.getCategoryImage()).into(holder.orgImage);
                 holder.orgCategoryText.setText(organizationNew.getCategoryName());
                 holder.orgCauseText.setText(organizationNew.getCauseName());
                 holder.orgNameText.setText(organizationNew.getCharityName());
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(getActivity(), ActivityDonate.class);
+                        intent.putExtra("ein",organizations.get(position).getEin());
+                        startActivity(intent);
+                    }
+                });
             } catch (NullPointerException e) {
                 e.printStackTrace();
             }
