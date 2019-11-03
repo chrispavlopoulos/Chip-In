@@ -25,8 +25,8 @@ public class HomeFragment extends ChipFragment{
     private RecyclerView mainRecyclerView;
     private RecyclerView eventRecyclerView;
     private UserDataProvider userDataProvider;
-    protected ArrayList<Event> events = new ArrayList<>();
-    protected ArrayList<Donation> donations = new ArrayList<>();
+    protected ArrayList<Event> eventsList = new ArrayList<>();
+    protected ArrayList<Donation> donationsList = new ArrayList<>();
 
     @Nullable
     @Override
@@ -54,70 +54,56 @@ public class HomeFragment extends ChipFragment{
                 onError("Error loading donations.");
             }
         });
+        userDataProvider.getAllEvents(new Interfaces.EventsCallback() {
+            @Override
+            public void onCompleted(ArrayList<Event> events) {
+                eventsList = events;
+            }
+
+            @Override
+            public void onError(String msg) {
+                onError("Error loading events.");
+            }
+        });
         //eventRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         //eventRecyclerView.setAdapter(new HomeFeaturedAdapter());
     }
-/*
-    private class HomeFeaturedAdapter extends RecyclerView.Adapter<HomeFeaturedViewHolder>{
 
-        public HomeFeaturedAdapter(){
-        }
-
-        @NonNull
-        @Override
-        public HomeFeaturedViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(context).inflate(R.layout.view_home_featured_item, parent, false);
-            return new HomeFeaturedViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull HomeFeaturedViewHolder holder, int position) {
-
-        }
-
-        @Override
-        public int getItemCount() {
-            return events.size();
-        }
-    }
-
-    private class HomeFeaturedViewHolder extends RecyclerView.ViewHolder{
-        ImageView companyPic;
-        TextView eventCountdown;
-        TextView eventTitle;
-        TextView eventDescription;
-
-        public HomeFeaturedViewHolder(@NonNull View itemView) {
-            super(itemView);
-        }
-    }
-*/
 class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
-    private ArrayList<Donation> donations;
-    private LayoutInflater mInflater;
-    private Context ctx;
-
     // data is passed into the constructor
-    RecyclerAdapter(Context context, ArrayList<Donation> data) {
-        this.mInflater = LayoutInflater.from(context);
-        this.donations = data;
-        ctx = context;
+    RecyclerAdapter() {
+
     }
 
     // inflates the row layout from xml when needed
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, final int viewType) {
-        View view = mInflater.inflate(R.layout.view_item_donation, parent, false);
+        View view = null;
+        switch (viewType) {
+            case 0:
+                view = LayoutInflater.from(context).inflate(R.layout.fragment_home_featured, parent, false);
+                break;
+            case 1:
+                view = LayoutInflater.from(context).inflate(R.layout.view_item_donation, parent, false);
+                break;
+        }
         return new ViewHolder(view);
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (position == 0) {
+            return 0;
+        } else {
+            return 1;
+        }
     }
 
     // binds the data to the TextView in each row
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        final Donation donation = donations.get(position);
-        final Context context = getContext();
-        final ViewHolder hold = holder;
+        final Donation donation = donationsList.get(position);
         holder.title.setText(donation.getCharityName());
         holder.time.setText(donation.getCharityName());
         holder.comment.setText(donation.getCharityName());
@@ -126,7 +112,7 @@ class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
     // total number of rows
     @Override
     public int getItemCount() {
-        return donations.size();
+        return donationsList.size();
     }
 
 
@@ -151,9 +137,24 @@ class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
         }
     }
 
+    public class ViewHolder2 extends RecyclerView.ViewHolder implements View.OnClickListener {
+        RecyclerView recyclerView;
+
+        ViewHolder2(View itemView) {
+            super(itemView);
+            recyclerView = itemView.findViewById(R.id.recycler_home_featured);
+        }
+
+        @Override
+        public void onClick(View view) {
+            Donation donation = getItem(getAdapterPosition());
+            //showDetailView(result);
+        }
+    }
+
     // convenience method for getting data at click position
     Donation getItem(int id) {
-        return donations.get(id);
+        return donationsList.get(id);
     }
 }
 }
