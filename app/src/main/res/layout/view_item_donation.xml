@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
-    android:layout_marginTop="@dimen/padding_medium"
-    android:layout_marginBottom="@dimen/padding_medium"
     android:layout_marginStart="@dimen/padding_large"
+    android:layout_marginTop="@dimen/padding_medium"
     android:layout_marginEnd="@dimen/padding_large"
-    app:cardBackgroundColor="@color/white"
-    app:cardElevation="6dp"
+    android:layout_marginBottom="@dimen/padding_medium"
     android:background="@color/cardViewBackground"
-    app:cardCornerRadius="@dimen/corner_radius_button">
+    android:orientation="horizontal"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="@dimen/corner_radius_button"
+    app:cardElevation="6dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:padding="@dimen/padding_large"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_large">
 
         <LinearLayout
             android:id="@+id/linearLayout2"
@@ -27,7 +27,7 @@
             android:layout_marginEnd="8dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/imageView"
+            app:layout_constraintEnd_toStartOf="@+id/wrapper_share_img"
             app:layout_constraintStart_toEndOf="@+id/donation_amount"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -69,15 +69,23 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/share_img"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/baseline_share_white_24"
-            android:tint="@color/primary_dark"
+        <RelativeLayout
+            android:id="@+id/wrapper_share_img"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/share_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/baseline_share_white_24"
+                android:tint="@color/primary_dark" />
+
+        </RelativeLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

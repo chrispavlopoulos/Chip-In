@@ -1,11 +1,13 @@
 package com.teamwd.chipin.Fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -207,6 +209,22 @@ public class UserFragment extends ChipFragment{
             holder.comment.setText(donation.getUserComment());
             NumberFormat formatter = NumberFormat.getCurrencyInstance();
             holder.donation.setText(formatter.format(donation.getAmount()));
+
+            holder.shareImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String donationText = holder.title.getText() + "\n";
+                    donationText += holder.time.getText()+ "\n\n";
+                    donationText += holder.comment.getText()+ "\n\n";
+                    donationText += holder.donation.getText();
+
+                    Intent sendIntent = new Intent();
+                    sendIntent.setAction(Intent.ACTION_SEND);
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, donationText);
+                    sendIntent.setType("text/plain");
+                    startActivity(Intent.createChooser(sendIntent, "Share"));
+                }
+            });
         }
 
         // total number of rows
@@ -222,6 +240,8 @@ public class UserFragment extends ChipFragment{
             TextView time;
             TextView comment;
             TextView donation;
+            ImageView shareImage;
+
 
             ViewHolder(View itemView) {
                 super(itemView);
@@ -229,6 +249,7 @@ public class UserFragment extends ChipFragment{
                 time = itemView.findViewById(R.id.donation_time_stamp);
                 comment = itemView.findViewById(R.id.donation_comment);
                 donation = itemView.findViewById(R.id.donation_amount);
+                shareImage = itemView.findViewById(R.id.share_img);
                 itemView.setOnClickListener(this);
             }
 
