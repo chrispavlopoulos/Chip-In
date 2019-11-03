@@ -2,8 +2,10 @@ package com.teamwd.chipin.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import android.app.Activity;
@@ -30,6 +32,7 @@ import com.teamwd.chipin.R;
 import com.teamwd.chipin.Utils.OrganizationDataProvider;
 import com.teamwd.chipin.Utils.SharedPrefsUtil;
 import com.teamwd.chipin.Utils.UserDataProvider;
+import com.teamwd.chipin.Views.FluidSearchView;
 
 import java.util.ArrayList;
 
@@ -41,10 +44,12 @@ public class ActivityMain extends AppCompatActivity {
     Toolbar toolbar;
     View navBarBackground;
     ViewPager viewPager;
+    ViewPagerAdapter viewPagerAdapter;
     BottomNavigationView bottomNav;
     private static boolean IS_TESTING_DB = false;
 
     private MenuItem lastCheckedItem = null;
+    private int lastPosition = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +58,7 @@ public class ActivityMain extends AppCompatActivity {
 
         content = findViewById(R.id.wrapper_content);
         toolbar = findViewById(R.id.toolbar);
+        searchView = findViewById(R.id.search_view);
         navBarBackground = findViewById(R.id.navigation_background);
         viewPager = findViewById(R.id.view_pager_main);
         bottomNav = findViewById(R.id.bottom_nav_main);
@@ -141,17 +147,18 @@ public class ActivityMain extends AppCompatActivity {
     private void setUpApp() {
         bottomNav.setVisibility(View.VISIBLE);
         setUpViewPager();
+        setUpSearch();
         //This is for testing only; comment this if not needed
         //startActivity(new Intent(this, ActivityDatabaseTest.class));
     }
 
     private void setUpViewPager() {
-        ViewPagerAdapter pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), ViewPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), ViewPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         viewPager.setOffscreenPageLimit(2);
-        viewPager.setAdapter(pagerAdapter);
+        viewPager.setAdapter(viewPagerAdapter);
 
+        lastPosition = 1;
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            int lastPosition = -1;
 
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -177,11 +184,11 @@ public class ActivityMain extends AppCompatActivity {
 
 
                 if(position == 2){
-                    toolbar.getMenu().getItem(0).setVisible(true);
-                    toolbar.getMenu().getItem(1).setVisible(true);
+                    searchView.show();
+//                    toolbar.getMenu().getItem(0).setVisible(false);
+//                    toolbar.getMenu().getItem(1).setVisible(true);
                 }else{
-                    toolbar.getMenu().getItem(0).setVisible(false);
-                    toolbar.getMenu().getItem(1).setVisible(false);
+                    searchView.hide();
                 }
             }
 
@@ -236,7 +243,43 @@ public class ActivityMain extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.org_menu, menu);
-        return true;
+        //getMenuInflater().inflate(R.menu.org_menu, menu);
+        return false;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        Fragment fragment = viewPagerAdapter.getItem(lastPosition);
+        if(fragment instanceof OrgFragment)
+            return fragment.onOptionsItemSelected(item);
+        else
+            return super.onOptionsItemSelected(item);
+    }
+
+    FluidSearchView searchView;
+
+    private void setUpSearch() {
+        searchView.init(toolbar, this);
+        searchView.hide();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                if (query.isEmpty()) return true;
+                Fragment orgFrag = viewPagerAdapter.getItem(2);
+                if(!(orgFrag instanceof OrgFragment))
+                    return true;
+
+                ((OrgFragment) orgFrag).onQueryTextSubmit(query);
+
+                return true;
+            }
+        });
+
     }
 }

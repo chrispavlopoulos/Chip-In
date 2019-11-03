@@ -3,6 +3,7 @@ package com.teamwd.chipin.Fragments;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.squareup.picasso.Picasso;
+import com.teamwd.chipin.Activities.ActivityMain;
 import com.teamwd.chipin.Interfaces.Interfaces;
 import com.teamwd.chipin.Models.OrganizationNew;
 
@@ -29,6 +31,7 @@ public class OrgFragment extends ChipFragment{
 
     private RecyclerView recyclerView;
     private ArrayList<OrganizationNew> organizations;
+    private ArrayList<OrganizationNew> filterOrganizations;
     private SwipeRefreshLayout swipeRefreshLayout;
     private OrgRecyclerAdapter adapter;
 
@@ -52,6 +55,20 @@ public class OrgFragment extends ChipFragment{
         return root;
     }
 
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.search:
+                //((ActivityMain) getActivity()).openSearch();
+                break;
+            case R.id.filter:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
     public void forceUpdateDatabase() {
         OrganizationDataProvider.getInstance(getContext()).loadAllOrganizations(getContext(), new Interfaces.OrgsCallback() {
             @Override
@@ -63,6 +80,8 @@ public class OrgFragment extends ChipFragment{
                             @Override
                             public void onCompleted(ArrayList<OrganizationNew> organizationNewArrayList) {
                                 organizations = organizationNewArrayList;
+                                filterOrganizations = new ArrayList<>(organizations);
+
                                 adapter.notifyDataSetChanged();
                                 swipeRefreshLayout.setRefreshing(false);
                             }
@@ -93,6 +112,7 @@ public class OrgFragment extends ChipFragment{
 
     public void setUpRecyclerView(){
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
+
         UserDataProvider.getInstance(getContext()).getAllOrgs(new Interfaces.OrgsCallback() {
             @Override
             public void onCompleted(ArrayList<OrganizationNew> organizationNewArrayList) {
@@ -107,6 +127,7 @@ public class OrgFragment extends ChipFragment{
                                         @Override
                                         public void onCompleted(ArrayList<OrganizationNew> organizationNewArrayList) {
                                             organizations = organizationNewArrayList;
+                                            filterOrganizations = new ArrayList<>(organizations);
                                             adapter = new OrgRecyclerAdapter();
                                             recyclerView.setAdapter(adapter);
                                             adapter.notifyDataSetChanged();
@@ -133,6 +154,7 @@ public class OrgFragment extends ChipFragment{
                     });
                 } else {
                     organizations = organizationNewArrayList;
+                    filterOrganizations = new ArrayList<>(organizations);
                     adapter = new OrgRecyclerAdapter();
                     recyclerView.setAdapter(adapter);
                 }
@@ -161,7 +183,7 @@ public class OrgFragment extends ChipFragment{
         // binds the data to the TextView in each row
         @Override
         public void onBindViewHolder(final OrgViewHolder holder, int position) {
-            final OrganizationNew organizationNew = organizations.get(position);
+            final OrganizationNew organizationNew = filterOrganizations.get(position);
             try {
                 Picasso.with(getContext()).load(organizationNew.getCategoryImage()).into(holder.orgImage);
                 holder.orgCategoryText.setText(organizationNew.getCategoryName());
@@ -175,7 +197,7 @@ public class OrgFragment extends ChipFragment{
         // total number of rows
         @Override
         public int getItemCount() {
-            return organizations.size();
+            return filterOrganizations.size();
         }
 
 
@@ -198,5 +220,17 @@ public class OrgFragment extends ChipFragment{
 
             }
         }
+    }
+
+
+    public void onQueryTextSubmit(String query){
+        filterOrganizations.clear();
+
+        for(OrganizationNew org: organizations){
+            if(org.getCharityName().toLowerCase().contains(query.toLowerCase()))
+                filterOrganizations.add(org);
+        }
+
+        adapter.notifyDataSetChanged();
     }
 }
