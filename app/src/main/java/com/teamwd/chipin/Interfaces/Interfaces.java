@@ -55,6 +55,11 @@ public class Interfaces {
         public void onError(String msg);
     }
 
+    public interface OrgCallback{
+        public void onCompleted(OrganizationNew organizationNew);
+        public void onError(String msg);
+    }
+
     public interface DonationsListCallback{
         public void onCompleted(ArrayList<Donation> donations);
         public void onError(String msg);

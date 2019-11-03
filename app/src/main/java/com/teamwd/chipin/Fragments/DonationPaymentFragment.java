@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.firestore.auth.User;
 import com.teamwd.chipin.Interfaces.Interfaces;
 import com.teamwd.chipin.Models.Donation;
 import com.teamwd.chipin.Models.ModelUser;
@@ -46,7 +47,29 @@ public class DonationPaymentFragment extends ChipFragment {
         // Inflate the layout for this fragment
         root = inflater.inflate(R.layout.fragment_donation_payment, container, false);
 
-        buildViews();
+        if(organization == null){
+            UserDataProvider userDataProvider = UserDataProvider.getInstance(root.getContext());
+
+            Bundle bundle = this.getArguments();
+            String ein = bundle.getString("ein", "");
+
+
+
+            userDataProvider.getOrg(ein, new Interfaces.OrgCallback() {
+                @Override
+                public void onCompleted(OrganizationNew organizationNew) {
+                    organization = organizationNew;
+                    buildViews();
+                }
+
+                @Override
+                public void onError(String msg) {
+
+                }
+            });
+        }else{
+            buildViews();
+        }
 
         return root;
     }
@@ -110,5 +133,4 @@ public class DonationPaymentFragment extends ChipFragment {
     public void setOrg(OrganizationNew organizationNew){
         this.organization = organizationNew;
     }
-
 }
