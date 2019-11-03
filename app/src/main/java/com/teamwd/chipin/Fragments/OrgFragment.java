@@ -1,5 +1,6 @@
 package com.teamwd.chipin.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -14,6 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
+import com.teamwd.chipin.Activities.ActivityMain;
+import com.teamwd.chipin.Activities.ActivityOrgDetail;
 import com.teamwd.chipin.Objects.Organization;
 import com.teamwd.chipin.Objects.OrganizationCategory;
 import com.teamwd.chipin.Objects.OrganizationCause;
@@ -57,6 +60,13 @@ public class OrgFragment extends ChipFragment{
 
     }
 
+    private void startOrgDetailActivity(String ein){
+        Bundle orgBundle = new Bundle();
+        orgBundle.putString("ein", ein);
+
+        startActivity(new Intent(getActivity(), ActivityOrgDetail.class), orgBundle);
+    }
+
     private class OrgAdapter extends RealmRecyclerViewAdapter<Organization, OrgViewHolder>{
 
 
@@ -73,8 +83,8 @@ public class OrgFragment extends ChipFragment{
         }
 
         @Override
-        public void onBindViewHolder(@NonNull OrgViewHolder holder, int position) {
-            Organization org = organizations.get(position);
+        public void onBindViewHolder(@NonNull final OrgViewHolder holder, int position) {
+            final Organization org = organizations.get(position);
             if(org == null || !org.isValid())
                 return;
 
@@ -94,6 +104,12 @@ public class OrgFragment extends ChipFragment{
 
             holder.orgNameText.setText(org.getCharityName());
 
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startOrgDetailActivity(org.getEin());
+                }
+            });
         }
 
         @Override
